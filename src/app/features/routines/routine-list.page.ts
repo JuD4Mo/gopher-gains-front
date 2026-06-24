@@ -21,12 +21,17 @@ import { ICONS } from '../../shared/icons';
   ],
   template: `
     <div class="space-y-6">
+
+      <!-- Page header -->
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
-            <div class="w-4 h-4 text-accent [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.routines | safeHtml"></div>
+          <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background-color: rgba(183,148,244,0.12); color: #B794F4;">
+            <div class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.routines | safeHtml"></div>
           </div>
-          <h2 class="text-xl font-bold font-display text-text">Routines</h2>
+          <div>
+            <h2 class="text-lg font-bold font-display leading-none" style="color: var(--color-text);">Routines</h2>
+            <p class="text-xs font-mono mt-0.5" style="color: var(--color-muted);">Workout plans</p>
+          </div>
         </div>
         <a routerLink="/routines/new" class="btn-primary">
           <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.plus | safeHtml"></span>
@@ -34,66 +39,72 @@ import { ICONS } from '../../shared/icons';
         </a>
       </div>
 
-      <app-card [accentColor]="'accent'">
-        <div class="p-5">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="relative flex-1">
-              <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none w-4 h-full [&>svg]:w-4 [&>svg]:h-4 text-text-muted" [innerHTML]="icons.search | safeHtml"></div>
-              <input
-                [(ngModel)]="nameFilter" (input)="onFilterChange()"
-                placeholder="Search routines..." class="w-full pl-9 pr-3 py-2 text-sm border border-border rounded-lg bg-surface-light focus:bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none"
-              />
-            </div>
-            <select
-              [(ngModel)]="typeFilter" (change)="onFilterChange()"
-              class="px-3 py-2 text-sm border border-border rounded-lg bg-surface-light focus:bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none"
-            >
-              <option value="">All types</option>
-              <option value="default">Default</option>
-              <option value="customized">Customized</option>
-            </select>
+      <!-- Table card -->
+      <div class="card">
+        <!-- Filters -->
+        <div class="flex items-center gap-3 p-5" style="border-bottom: 1px solid var(--color-border);">
+          <div class="relative flex-1 max-w-xs">
+            <div
+              class="absolute inset-y-0 left-3 flex items-center pointer-events-none [&>svg]:w-4 [&>svg]:h-4"
+              style="color: var(--color-muted);"
+              [innerHTML]="icons.search | safeHtml"
+            ></div>
+            <input [(ngModel)]="nameFilter" (input)="onFilterChange()" placeholder="Search routines..." class="input pl-9" />
           </div>
-
-          @if (loading()) { <app-loading-spinner /> }
-          @else if (error()) { <app-error-message [message]="error()" /> }
-          @else if (routines().length === 0) {
-            <app-empty-state [icon]="icons.emptyBox" title="No routines yet" message="Create your first routine to get started." />
-          } @else {
-            <div class="overflow-x-auto -mx-5">
-              <table class="w-full text-sm">
-                <thead>
-                  <tr class="border-b border-border">
-                    <th class="text-left py-3 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">Name</th>
-                    <th class="text-left py-3 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">Type</th>
-                    <th class="text-left py-3 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">Frequency</th>
-                    <th class="text-right py-3 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (r of routines(); track r.id) {
-                    <tr class="border-b border-border/50 hover:bg-surface-light transition-colors">
-                      <td class="py-3 px-5 font-medium text-text">{{ r.name }}</td>
-                      <td class="py-3 px-5">
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium capitalize"
-                          [class.bg-teal/10]="r.type === 'default'" [class.text-teal]="r.type === 'default'"
-                          [class.bg-accent/10]="r.type === 'customized'" [class.text-accent]="r.type === 'customized'"
-                        >{{ r.type }}</span>
-                      </td>
-                      <td class="py-3 px-5 text-text-muted">{{ r.frequency }}x / week</td>
-                      <td class="py-3 px-5 text-right">
-                        <a [routerLink]="['/routines', r.id]" class="btn-ghost text-sm px-3 py-1.5 rounded-lg" aria-label="View {{ r.name }}">
-                          <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.chevronRight | safeHtml"></span>
-                        </a>
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
-            <app-pagination [meta]="pagination()" (pageChange)="onPageChange($event)" />
-          }
+          <select [(ngModel)]="typeFilter" (change)="onFilterChange()" class="input max-w-[160px]">
+            <option value="">All types</option>
+            <option value="default">Default</option>
+            <option value="customized">Customized</option>
+          </select>
         </div>
-      </app-card>
+
+        @if (loading()) { <app-loading-spinner /> }
+        @else if (error()) { <app-error-message [message]="error()" /> }
+        @else if (routines().length === 0) {
+          <app-empty-state [icon]="icons.emptyBox" title="No routines yet" message="Create your first routine to get started." />
+        } @else {
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr>
+                  <th class="table-header-cell">Name</th>
+                  <th class="table-header-cell">Type</th>
+                  <th class="table-header-cell hidden sm:table-cell">Frequency</th>
+                  <th class="table-header-cell text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (r of routines(); track r.id) {
+                  <tr class="table-row">
+                    <td class="table-cell font-medium">{{ r.name }}</td>
+                    <td class="table-cell">
+                      <span
+                        class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold font-mono capitalize"
+                        [style.background-color]="r.type === 'default' ? 'rgba(0,172,215,0.12)' : 'rgba(183,148,244,0.12)'"
+                        [style.color]="r.type === 'default' ? 'var(--color-accent)' : '#B794F4'"
+                      >{{ r.type }}</span>
+                    </td>
+                    <td class="table-cell hidden sm:table-cell font-mono" style="color: var(--color-muted);">{{ r.frequency }}x / week</td>
+                    <td class="table-cell text-right">
+                      <a
+                        [routerLink]="['/routines', r.id]"
+                        class="btn-ghost text-xs px-2.5 py-1.5"
+                        [attr.aria-label]="'View ' + r.name"
+                      >
+                        <span class="w-3.5 h-3.5 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.chevronRight | safeHtml"></span>
+                        View
+                      </a>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          <div class="px-5 pb-5">
+            <app-pagination [meta]="pagination()" (pageChange)="onPageChange($event)" />
+          </div>
+        }
+      </div>
     </div>
   `,
 })

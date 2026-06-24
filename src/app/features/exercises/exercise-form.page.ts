@@ -16,33 +16,46 @@ import { ICONS } from '../../shared/icons';
   imports: [RouterLink, FormsModule, CardComponent, ErrorMessageComponent, SafeHtmlPipe],
   template: `
     <div class="max-w-2xl mx-auto space-y-6">
+      <!-- Breadcrumb header -->
       <div class="flex items-center gap-3">
-        <a routerLink="/exercises" class="btn-ghost px-0 text-sm gap-1.5">
+        <a routerLink="/exercises" class="btn-ghost gap-1.5 text-sm px-2">
           <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.arrowLeft | safeHtml"></span>
           Back
         </a>
-        <h2 class="text-xl font-bold font-display text-text">{{ isEdit() ? 'Edit Exercise' : 'New Exercise' }}</h2>
+        <span style="color: var(--color-border);">/</span>
+        <h2 class="text-lg font-bold font-display" style="color: var(--color-text);">
+          {{ isEdit() ? 'Edit Exercise' : 'New Exercise' }}
+        </h2>
       </div>
 
-      <app-card>
+      <div class="card">
+        <div class="px-6 pt-5 pb-4" style="border-bottom: 1px solid var(--color-border);">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color: var(--color-accent-dim); color: var(--color-accent);">
+              <div class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.exercises | safeHtml"></div>
+            </div>
+            <div>
+              <p class="text-sm font-semibold font-display" style="color: var(--color-text);">Exercise Details</p>
+              <p class="text-xs font-mono" style="color: var(--color-muted);">Fill in the exercise information</p>
+            </div>
+          </div>
+        </div>
+
         <form (ngSubmit)="onSubmit()" class="p-6 space-y-5">
           <app-error-message [message]="error()" />
 
           <div>
-            <label class="block text-sm font-medium text-text mb-1.5">Name</label>
+            <label class="block text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--color-muted);">Name</label>
             <input
               [(ngModel)]="form.name" name="name" required
-              placeholder="Bench Press"
-              class="w-full px-3.5 py-2.5 text-sm border border-border rounded-lg bg-surface-light focus:bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none"
+              placeholder="e.g. Bench Press"
+              class="input"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-text mb-1.5">Muscle Group</label>
-            <select
-              [(ngModel)]="form.muscleGroup" name="muscleGroup" required
-              class="w-full px-3.5 py-2.5 text-sm border border-border rounded-lg bg-surface-light focus:bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none"
-            >
+            <label class="block text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--color-muted);">Muscle Group</label>
+            <select [(ngModel)]="form.muscleGroup" name="muscleGroup" required class="input">
               <option value="" disabled>Select a muscle group</option>
               <option value="chest">Chest</option>
               <option value="back">Back</option>
@@ -54,31 +67,34 @@ import { ICONS } from '../../shared/icons';
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-text mb-1.5">Description</label>
+            <label class="block text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--color-muted);">Description</label>
             <textarea
               [(ngModel)]="form.description" name="description" required rows="3"
               placeholder="Describe the exercise..."
-              class="w-full px-3.5 py-2.5 text-sm border border-border rounded-lg bg-surface-light focus:bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none resize-none"
+              class="input resize-none"
             ></textarea>
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-text mb-1.5">Execution Tip</label>
+            <label class="block text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--color-muted);">Execution Tip</label>
             <textarea
               [(ngModel)]="form.executionTip" name="executionTip" required rows="2"
               placeholder="How to perform this exercise correctly..."
-              class="w-full px-3.5 py-2.5 text-sm border border-border rounded-lg bg-surface-light focus:bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none resize-none"
+              class="input resize-none"
             ></textarea>
           </div>
 
-          <div class="flex items-center gap-3 pt-2">
+          <div class="flex items-center gap-3 pt-2" style="border-top: 1px solid var(--color-border);">
             <button type="submit" [disabled]="submitting()" class="btn-primary">
+              @if (submitting()) {
+                <span class="w-4 h-4 rounded-full animate-spin border-2 border-white/30 border-t-white"></span>
+              }
               {{ submitting() ? 'Saving...' : isEdit() ? 'Update Exercise' : 'Create Exercise' }}
             </button>
             <a routerLink="/exercises" class="btn-secondary">Cancel</a>
           </div>
         </form>
-      </app-card>
+      </div>
     </div>
   `,
 })

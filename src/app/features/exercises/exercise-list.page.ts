@@ -22,12 +22,17 @@ import { ICONS } from '../../shared/icons';
   ],
   template: `
     <div class="space-y-6">
+
+      <!-- Page header -->
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-teal/10 flex items-center justify-center">
-            <div class="w-4 h-4 text-teal [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.exercises | safeHtml"></div>
+          <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background-color: var(--color-accent-dim); color: var(--color-accent);">
+            <div class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.exercises | safeHtml"></div>
           </div>
-          <h2 class="text-xl font-bold font-display text-text">Exercises</h2>
+          <div>
+            <h2 class="text-lg font-bold font-display leading-none" style="color: var(--color-text);">Exercises</h2>
+            <p class="text-xs font-mono mt-0.5" style="color: var(--color-muted);">Exercise catalog</p>
+          </div>
         </div>
         <a routerLink="/exercises/new" class="btn-primary">
           <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.plus | safeHtml"></span>
@@ -35,76 +40,84 @@ import { ICONS } from '../../shared/icons';
         </a>
       </div>
 
-      <app-card [accentColor]="'teal'">
-        <div class="p-5">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="relative flex-1">
-              <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none w-4 h-full [&>svg]:w-4 [&>svg]:h-4 text-text-muted" [innerHTML]="icons.search | safeHtml"></div>
-              <input
-                [(ngModel)]="nameFilter"
-                (input)="onFilterChange()"
-                placeholder="Search exercises..."
-                class="w-full pl-9 pr-3 py-2 text-sm border border-border rounded-lg bg-surface-light focus:bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none"
-              />
-            </div>
-            <select
-              [(ngModel)]="muscleFilter"
-              (change)="onFilterChange()"
-              class="px-3 py-2 text-sm border border-border rounded-lg bg-surface-light focus:bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none"
-            >
-              <option value="">All muscles</option>
-              <option value="chest">Chest</option>
-              <option value="back">Back</option>
-              <option value="legs">Legs</option>
-              <option value="arms">Arms</option>
-              <option value="delts">Delts</option>
-              <option value="abs">Abs</option>
-            </select>
-          </div>
-
-          @if (loading()) {
-            <app-loading-spinner />
-          } @else if (error()) {
-            <app-error-message [message]="error()" />
-          } @else if (exercises().length === 0) {
-            <app-empty-state
-              [icon]="icons.emptyBox"
-              title="No exercises yet"
-              message="Create your first exercise to get started."
+      <!-- Table card -->
+      <div class="card">
+        <!-- Filters -->
+        <div class="flex items-center gap-3 p-5" style="border-bottom: 1px solid var(--color-border);">
+          <div class="relative flex-1 max-w-xs">
+            <div
+              class="absolute inset-y-0 left-3 flex items-center pointer-events-none [&>svg]:w-4 [&>svg]:h-4"
+              style="color: var(--color-muted);"
+              [innerHTML]="icons.search | safeHtml"
+            ></div>
+            <input
+              [(ngModel)]="nameFilter"
+              (input)="onFilterChange()"
+              placeholder="Search exercises..."
+              class="input pl-9"
             />
-          } @else {
-            <div class="overflow-x-auto -mx-5">
-              <table class="w-full text-sm">
-                <thead>
-                  <tr class="border-b border-border">
-                    <th class="text-left py-3 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">Name</th>
-                    <th class="text-left py-3 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">Muscle Group</th>
-                    <th class="text-left py-3 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">Description</th>
-                    <th class="text-right py-3 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (ex of exercises(); track ex.id) {
-                    <tr class="border-b border-border/50 hover:bg-surface-light transition-colors">
-                      <td class="py-3 px-5 font-medium text-text">{{ ex.name }}</td>
-                      <td class="py-3 px-5">
-                        <app-muscle-group-badge [group]="ex.muscleGroup" />
-                      </td>
-                      <td class="py-3 px-5 text-text-muted max-w-xs truncate">{{ ex.description }}</td>
-                      <td class="py-3 px-5 text-right">
-                        <a [routerLink]="['/exercises', ex.id]" class="btn-ghost text-sm px-3 py-1.5 rounded-lg" aria-label="Edit {{ ex.name }}">
-                          <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.edit | safeHtml"></span>
-                        </a>
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
-            <app-pagination [meta]="pagination()" (pageChange)="onPageChange($event)" />
-          }
+          </div>
+          <select
+            [(ngModel)]="muscleFilter"
+            (change)="onFilterChange()"
+            class="input max-w-[160px]"
+          >
+            <option value="">All muscles</option>
+            <option value="chest">Chest</option>
+            <option value="back">Back</option>
+            <option value="legs">Legs</option>
+            <option value="arms">Arms</option>
+            <option value="delts">Delts</option>
+            <option value="abs">Abs</option>
+          </select>
         </div>
-      </app-card>
+
+        <!-- Content -->
+        @if (loading()) {
+          <app-loading-spinner />
+        } @else if (error()) {
+          <app-error-message [message]="error()" />
+        } @else if (exercises().length === 0) {
+          <app-empty-state [icon]="icons.emptyBox" title="No exercises yet" message="Create your first exercise to get started." />
+        } @else {
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr>
+                  <th class="table-header-cell">Name</th>
+                  <th class="table-header-cell">Muscle</th>
+                  <th class="table-header-cell hidden md:table-cell">Description</th>
+                  <th class="table-header-cell text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (ex of exercises(); track ex.id) {
+                  <tr class="table-row">
+                    <td class="table-cell font-medium">{{ ex.name }}</td>
+                    <td class="table-cell">
+                      <app-muscle-group-badge [group]="ex.muscleGroup" />
+                    </td>
+                    <td class="table-cell hidden md:table-cell max-w-xs truncate" style="color: var(--color-muted);">{{ ex.description }}</td>
+                    <td class="table-cell text-right">
+                      <a
+                        [routerLink]="['/exercises', ex.id]"
+                        class="btn-ghost text-xs px-2.5 py-1.5"
+                        [attr.aria-label]="'Edit ' + ex.name"
+                      >
+                        <span class="w-3.5 h-3.5 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.edit | safeHtml"></span>
+                        Edit
+                      </a>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          <div class="px-5 pb-5">
+            <app-pagination [meta]="pagination()" (pageChange)="onPageChange($event)" />
+          </div>
+        }
+      </div>
     </div>
   `,
 })
@@ -136,7 +149,10 @@ export class ExerciseListPage implements OnInit {
         if (res.meta) this.pagination.set(res.meta);
         this.loading.set(false);
       },
-      error: (err) => { this.error.set(err.error?.message ?? err.message ?? 'Failed to load exercises'); this.loading.set(false); },
+      error: (err) => {
+        this.error.set(err.error?.message ?? err.message ?? 'Failed to load exercises');
+        this.loading.set(false);
+      },
     });
   }
 

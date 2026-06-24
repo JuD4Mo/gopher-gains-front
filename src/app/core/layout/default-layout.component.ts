@@ -5,17 +5,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SidebarComponent } from './sidebar.component';
 import { TopBarComponent } from './top-bar.component';
 import { ToastComponent } from '../../shared/components/toast.component';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
   selector: 'app-default-layout',
   standalone: true,
   imports: [RouterOutlet, SidebarComponent, TopBarComponent, ToastComponent],
   template: `
-    <div class="min-h-dvh bg-surface">
+    <div class="min-h-dvh" style="background-color: var(--color-base);">
       <app-sidebar />
       <div class="lg:ml-sidebar min-h-dvh flex flex-col">
         <app-top-bar [title]="pageTitle()" />
-        <main class="flex-1 p-6 lg:p-8">
+        <main class="flex-1 p-5 lg:p-7">
           <router-outlet />
         </main>
       </div>
@@ -27,6 +28,8 @@ export class DefaultLayoutComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  // Inject theme so it initializes on app start
+  private readonly _theme = inject(ThemeService);
   readonly pageTitle = signal('');
 
   constructor() {
