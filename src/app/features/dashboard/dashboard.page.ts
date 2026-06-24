@@ -124,10 +124,20 @@ import type { UserRoutine } from '../../models/user-routine.model';
       <!-- ── USER DASHBOARD ──────────────────────────────── -->
       <div class="space-y-7">
 
-        <!-- Greeting -->
-        <div>
-          <h2 class="text-2xl font-bold font-display" style="color: var(--color-text);">Your Progress</h2>
-          <p class="text-sm mt-0.5" style="color: var(--color-muted);">Keep pushing. Here is your current status.</p>
+        <!-- Greeting + primary CTA -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-bold font-display" style="color: var(--color-text);">Your Progress</h2>
+            <p class="text-sm mt-0.5" style="color: var(--color-muted);">Keep pushing. Here is your current status.</p>
+          </div>
+          <!-- Primary CTA: dominant, top-right, always visible -->
+          <a
+            routerLink="/sessions/new"
+            class="btn-primary self-start sm:self-auto flex items-center gap-2 px-5 py-2.5 text-sm"
+          >
+            <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.plus | safeHtml"></span>
+            Start Session
+          </a>
         </div>
 
         <!-- User stat cards -->
@@ -215,35 +225,6 @@ import type { UserRoutine } from '../../models/user-routine.model';
                 }
               </div>
             }
-          </div>
-        </div>
-
-        <!-- Quick actions -->
-        <div class="card p-5">
-          <h3 class="text-sm font-semibold font-display mb-4" style="color: var(--color-text);">Quick Actions</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <a
-              routerLink="/sessions/new"
-              class="flex flex-col gap-2 p-4 rounded-lg transition-all group"
-              style="border: 2px solid var(--color-accent); background-color: var(--color-accent-dim);"
-            >
-              <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color: var(--color-accent); color: white;">
-                <div class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.plus | safeHtml"></div>
-              </div>
-              <span class="text-sm font-semibold font-display" style="color: var(--color-accent);">Start Session</span>
-              <span class="text-xs" style="color: var(--color-muted);">Choose a routine and log your sets</span>
-            </a>
-            <a
-              routerLink="/exercises"
-              class="flex flex-col gap-2 p-4 rounded-lg transition-all group"
-              style="border: 1px solid var(--color-border);"
-            >
-              <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color: rgba(183,148,244,0.12); color: #B794F4;">
-                <div class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.exercises | safeHtml"></div>
-              </div>
-              <span class="text-sm font-semibold font-display" style="color: var(--color-text);">Browse Exercises</span>
-              <span class="text-xs" style="color: var(--color-muted);">Explore the full exercise catalog</span>
-            </a>
           </div>
         </div>
 
