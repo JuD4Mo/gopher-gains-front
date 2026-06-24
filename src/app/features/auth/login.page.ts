@@ -1,107 +1,186 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import type { UserRole } from '../../models/user.model';
 
-const MASCOT_MAIN       = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gopher-Gains-Logo-v1-Photoroom-WfSlqGUxq90Xa0oAPjDPNoaGcCYtXQ.png';
+const MASCOT_MAIN        = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gopher-Gains-Logo-v1-Photoroom-WfSlqGUxq90Xa0oAPjDPNoaGcCYtXQ.png';
 const MASCOT_CELEBRATING = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gopher-celebrating-BZF4N0dTYgz8RsFhJeLbyonFVV35Lx.png';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, FormsModule],
   template: `
     <div
-      class="min-h-dvh flex flex-col items-center justify-center px-6 py-16"
+      class="min-h-dvh flex"
       style="background-color: var(--color-base);"
     >
-      <!-- Back to home -->
-      <a
-        routerLink="/"
-        class="absolute top-6 left-6 flex items-center gap-1.5 text-[13px] font-medium transition-colors"
-        style="color: var(--color-muted);"
-      >
-        <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="15 18 9 12 15 6"/>
-        </svg>
-        Back
-      </a>
+      <!-- Left panel: form -->
+      <div class="flex-1 flex flex-col justify-center px-8 py-16 max-w-md mx-auto w-full">
 
-      <div class="w-full max-w-sm">
+        <!-- Back -->
+        <a
+          routerLink="/"
+          class="inline-flex items-center gap-1.5 text-[13px] font-medium mb-12 transition-colors w-fit"
+          style="color: var(--color-muted);"
+        >
+          <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+          Back to home
+        </a>
 
         <!-- Brand -->
-        <div class="flex flex-col items-center text-center mb-10">
+        <div class="flex items-center gap-3 mb-10">
           <img
             [src]="mascotMain"
             alt="Gopher Gains"
-            class="w-20 h-20 object-contain mb-5"
-            width="80"
-            height="80"
+            class="w-10 h-10 object-contain"
+            width="40"
+            height="40"
           />
-          <h1 class="text-2xl font-bold font-display tracking-tight mb-1" style="color: var(--color-text);">
-            Welcome back
-          </h1>
-          <p class="text-[14px]" style="color: var(--color-muted);">Choose how you want to continue</p>
+          <div>
+            <p class="text-[15px] font-bold font-display tracking-tight leading-none" style="color: var(--color-text);">
+              Gopher<span style="color: var(--color-accent);">Gains</span>
+            </p>
+            <p class="text-[11px] font-mono mt-0.5" style="color: var(--color-muted);">Fitness Platform</p>
+          </div>
         </div>
 
-        <!-- Role cards -->
-        <div class="flex flex-col gap-3">
+        <h1 class="text-2xl font-bold font-display tracking-tight mb-1" style="color: var(--color-text);">Sign in</h1>
+        <p class="text-sm mb-8" style="color: var(--color-muted);">Welcome back. Enter your details to continue.</p>
 
-          <!-- Admin -->
+        <!-- Mock form -->
+        <form (ngSubmit)="submitForm()" class="flex flex-col gap-5">
+          <div class="flex flex-col gap-1.5">
+            <label for="email" class="text-[13px] font-medium" style="color: var(--color-text);">Email</label>
+            <input
+              id="email"
+              type="email"
+              [(ngModel)]="email"
+              name="email"
+              placeholder="you@example.com"
+              class="input"
+              autocomplete="email"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between">
+              <label for="password" class="text-[13px] font-medium" style="color: var(--color-text);">Password</label>
+              <a href="#" class="text-[12px] transition-colors" style="color: var(--color-accent);">Forgot password?</a>
+            </div>
+            <input
+              id="password"
+              type="password"
+              [(ngModel)]="password"
+              name="password"
+              placeholder="••••••••"
+              class="input"
+              autocomplete="current-password"
+            />
+          </div>
+
+          @if (error()) {
+            <p class="text-[13px] px-3 py-2.5 rounded-lg" style="background-color: rgba(207,34,46,0.1); color: #CF222E; border: 1px solid rgba(207,34,46,0.2);">
+              {{ error() }}
+            </p>
+          }
+
           <button
-            (click)="continue('admin')"
-            class="group flex items-center gap-4 p-5 rounded-xl text-left transition-all duration-150"
-            style="background-color: var(--color-card); border: 1px solid var(--color-border);"
+            type="submit"
+            class="btn-primary w-full py-3 text-[15px] mt-1"
+            [disabled]="loading()"
+          >
+            @if (loading()) {
+              <svg class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+              </svg>
+              Signing in...
+            } @else {
+              Sign in
+            }
+          </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="flex items-center gap-3 my-8">
+          <div class="flex-1 h-px" style="background-color: var(--color-border);"></div>
+          <span class="text-[11px] font-mono uppercase tracking-wider" style="color: var(--color-muted);">Demo access</span>
+          <div class="flex-1 h-px" style="background-color: var(--color-border);"></div>
+        </div>
+
+        <!-- Demo role cards -->
+        <div class="flex flex-col gap-3">
+          <button
+            (click)="demoLogin('admin')"
+            class="group flex items-center gap-4 p-4 rounded-xl text-left transition-all duration-150"
+            style="background-color: var(--color-surface); border: 1px solid var(--color-border);"
           >
             <div
-              class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105"
-              style="background-color: rgba(28,200,255,0.12);"
+              class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+              style="background-color: rgba(61,184,255,0.12);"
             >
               <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--color-accent);">
-                <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
               </svg>
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-[15px] font-semibold font-display" style="color: var(--color-text);">Continue as Admin</p>
-              <p class="text-[12px] mt-0.5" style="color: var(--color-muted);">Manage exercises, routines, users and sessions</p>
+              <p class="text-[14px] font-semibold font-display" style="color: var(--color-text);">Continue as Admin</p>
+              <p class="text-[12px] mt-0.5" style="color: var(--color-muted);">Manage exercises, routines and users</p>
             </div>
-            <svg viewBox="0 0 24 24" class="w-4 h-4 flex-shrink-0 opacity-0 group-hover:opacity-60 transition-opacity" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--color-muted);">
+            <svg viewBox="0 0 24 24" class="w-4 h-4 flex-shrink-0 opacity-0 group-hover:opacity-50 transition-opacity" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--color-muted);">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
           </button>
 
-          <!-- User -->
           <button
-            (click)="continue('user')"
-            class="group flex items-center gap-4 p-5 rounded-xl text-left transition-all duration-150"
-            style="background-color: var(--color-card); border: 1px solid var(--color-border);"
+            (click)="demoLogin('user')"
+            class="group flex items-center gap-4 p-4 rounded-xl text-left transition-all duration-150"
+            style="background-color: var(--color-surface); border: 1px solid var(--color-border);"
           >
             <div
-              class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105"
-              style="background-color: rgba(45,164,78,0.12);"
+              class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+              style="background-color: rgba(125,211,252,0.12);"
             >
-              <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: #2DA44E;">
-                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+              <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: #7DD3FC;">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
               </svg>
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-[15px] font-semibold font-display" style="color: var(--color-text);">Continue as Athlete</p>
-              <p class="text-[12px] mt-0.5" style="color: var(--color-muted);">Track workouts, log sessions and view your progress</p>
+              <p class="text-[14px] font-semibold font-display" style="color: var(--color-text);">Continue as Athlete</p>
+              <p class="text-[12px] mt-0.5" style="color: var(--color-muted);">Track workouts and log your sessions</p>
             </div>
-            <svg viewBox="0 0 24 24" class="w-4 h-4 flex-shrink-0 opacity-0 group-hover:opacity-60 transition-opacity" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--color-muted);">
+            <svg viewBox="0 0 24 24" class="w-4 h-4 flex-shrink-0 opacity-0 group-hover:opacity-50 transition-opacity" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--color-muted);">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
           </button>
-
-        </div>
-
-        <!-- Celebrating mascot hint -->
-        <div class="flex flex-col items-center mt-10 gap-2">
-          <img [src]="mascotCelebrating" alt="" class="w-14 h-14 object-contain" width="56" height="56" aria-hidden="true" />
-          <p class="text-[12px] text-center" style="color: var(--color-muted);">No account needed. Just pick your role and go.</p>
         </div>
 
       </div>
+
+      <!-- Right panel: mascot (hidden on mobile) -->
+      <div
+        class="hidden lg:flex flex-1 flex-col items-center justify-center px-12 py-16"
+        style="background-color: var(--color-surface); border-left: 1px solid var(--color-border);"
+      >
+        <img
+          [src]="mascotCelebrating"
+          alt="Gopher celebrating"
+          class="w-56 h-56 object-contain mb-8"
+          width="224"
+          height="224"
+        />
+        <p class="text-2xl font-bold font-display tracking-tight text-center mb-3" style="color: var(--color-text);">
+          Your gains await.
+        </p>
+        <p class="text-[15px] text-center max-w-xs leading-relaxed" style="color: var(--color-muted);">
+          Every session logged is a step forward. Sign in and keep your streak alive.
+        </p>
+      </div>
+
     </div>
   `,
 })
@@ -112,12 +191,33 @@ export class LoginPage {
   protected readonly mascotMain        = MASCOT_MAIN;
   protected readonly mascotCelebrating = MASCOT_CELEBRATING;
 
-  continue(role: UserRole): void {
-    this.auth.login(role);
-    if (role === 'admin') {
-      this.router.navigate(['/admin']);
-    } else {
-      this.router.navigate(['/my']);
+  protected email    = '';
+  protected password = '';
+  protected readonly loading = signal(false);
+  protected readonly error   = signal('');
+
+  submitForm(): void {
+    this.error.set('');
+    if (!this.email.trim()) {
+      this.error.set('Please enter your email address.');
+      return;
     }
+    if (!this.password.trim()) {
+      this.error.set('Please enter your password.');
+      return;
+    }
+    // Mock auth: any credentials accepted; role determined by email prefix
+    this.loading.set(true);
+    setTimeout(() => {
+      this.loading.set(false);
+      const role: UserRole = this.email.toLowerCase().startsWith('admin') ? 'admin' : 'user';
+      this.auth.login(role);
+      this.router.navigate([role === 'admin' ? '/admin' : '/my']);
+    }, 600);
+  }
+
+  demoLogin(role: UserRole): void {
+    this.auth.login(role);
+    this.router.navigate([role === 'admin' ? '/admin' : '/my']);
   }
 }

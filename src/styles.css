@@ -5,19 +5,19 @@
 /* ─── CSS design tokens ───────────────────────────────── */
 :root {
   /* dark theme is the default */
-  --color-base:         #0A0F1A;
-  --color-surface:      #131B2E;
-  --color-card:         #1A2338;
-  --color-card-hover:   #1F2A42;
-  --color-border:       #263147;
-  --color-text:         #F5F7FA;
-  --color-muted:        #93A4BD;
-  --color-sidebar:      #0D1323;
-  --color-sidebar-hover:#18243A;
-  --color-sidebar-muted:#4A5A72;
-  --color-accent:       #1CC8FF;
-  --color-accent-dark:  #00ACD7;
-  --color-accent-dim:   rgba(28,200,255,0.12);
+  --color-base:         #101418;
+  --color-surface:      #1A1F29;
+  --color-card:         #242B36;
+  --color-card-hover:   #2A3240;
+  --color-border:       #313A4A;
+  --color-text:         #F8FAFC;
+  --color-muted:        #A0AEC0;
+  --color-sidebar:      #0E1219;
+  --color-sidebar-hover:#1E2535;
+  --color-sidebar-muted:#5A6A80;
+  --color-accent:       #3DB8FF;
+  --color-accent-dark:  #1AA0E8;
+  --color-accent-dim:   rgba(61,184,255,0.12);
 }
 
 .light {
@@ -52,7 +52,7 @@
   }
 
   ::selection {
-    background-color: rgba(0, 172, 215, 0.2);
+    background-color: rgba(61, 184, 255, 0.2);
     color: var(--color-text);
   }
 
@@ -86,12 +86,11 @@
   }
 
   .btn-primary {
-    @apply btn text-white font-semibold shadow-accent-glow-sm;
+    @apply btn text-white font-semibold;
     background-color: var(--color-accent);
   }
   .btn-primary:hover:not(:disabled) {
     background-color: var(--color-accent-dark);
-    box-shadow: 0 0 12px rgba(0,172,215,0.4);
   }
   .btn-primary:active:not(:disabled) {
     background-color: var(--color-accent-dark);
@@ -151,7 +150,6 @@
     @apply rounded-xl transition-all duration-150;
     background-color: var(--color-card);
     border: 1px solid var(--color-border);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.2);
   }
 
   /* Table */

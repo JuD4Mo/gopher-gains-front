@@ -34,7 +34,7 @@ interface ActivityItem {
     <div class="p-5 lg:p-8 max-w-[1400px] mx-auto">
 
       <!-- Header -->
-      <div class="flex items-start justify-between mb-7">
+      <div class="flex items-start justify-between mb-10">
         <div>
           <p class="text-[11px] font-mono font-semibold uppercase tracking-[0.12em] mb-1" style="color: var(--color-accent);">Admin Portal</p>
           <h1 class="text-2xl lg:text-3xl font-bold font-display tracking-tight" style="color: var(--color-text);">Platform Overview</h1>
@@ -47,7 +47,7 @@ interface ActivityItem {
       </div>
 
       <!-- Stats row -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
         @for (stat of stats(); track stat.label) {
           <a
             [routerLink]="stat.link"
@@ -151,23 +151,7 @@ interface ActivityItem {
             </div>
           </div>
 
-          <!-- Content summary -->
-          <div class="rounded-xl" style="background-color: var(--color-card); border: 1px solid var(--color-border);">
-            <div class="px-5 py-4" style="border-bottom: 1px solid var(--color-border);">
-              <p class="text-sm font-semibold font-display" style="color: var(--color-text);">Content Index</p>
-            </div>
-            <div class="px-5 py-1">
-              @for (stat of stats(); track stat.label) {
-                <div class="flex items-center justify-between py-3" style="border-bottom: 1px solid var(--color-border);">
-                  <div class="flex items-center gap-2.5">
-                    <span class="w-1.5 h-1.5 rounded-full flex-shrink-0" [style.background-color]="stat.accent"></span>
-                    <span class="text-[13px]" style="color: var(--color-muted);">{{ stat.label }}</span>
-                  </div>
-                  <span class="text-[13px] font-bold font-mono" style="color: var(--color-text);">{{ stat.count }}</span>
-                </div>
-              }
-            </div>
-          </div>
+
 
         </div>
       </div>
@@ -188,10 +172,9 @@ export class AdminDashboardPage implements OnInit {
   protected readonly today = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
   protected readonly quickActions = [
-    { label: 'New Exercise', desc: 'Add to library',   route: '/exercises/new', accent: '#1CC8FF', icon: ICONS.exercises },
-    { label: 'New Routine',  desc: 'Build a program',  route: '/routines/new',  accent: '#B794F4', icon: ICONS.routines  },
-    { label: 'Add User',     desc: 'Register a user',  route: '/users/new',     accent: '#2DA44E', icon: ICONS.users     },
-    { label: 'Assignments',  desc: 'Manage assignments',route: '/assignments',  accent: '#F6C90E', icon: ICONS.assignments },
+    { label: 'New Exercise', desc: 'Add to library',  route: '/exercises/new', accent: '#3DB8FF', icon: ICONS.exercises },
+    { label: 'New Routine',  desc: 'Build a program', route: '/routines/new',  accent: '#7DD3FC', icon: ICONS.routines  },
+    { label: 'Add User',     desc: 'Register a user', route: '/users/new',     accent: '#2DA44E', icon: ICONS.users     },
   ];
 
   protected getActivityIcon(type: ActivityItem['type']): string {

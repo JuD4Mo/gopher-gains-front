@@ -33,32 +33,36 @@ const LOGO_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gopher
       style="background-color: var(--color-sidebar); border-right: 1px solid var(--color-border);"
     >
       <!-- Brand -->
-      <div class="flex items-center gap-3 px-5 h-16 flex-shrink-0" style="border-bottom: 1px solid var(--color-border);">
-        <img
-          [src]="logoUrl"
-          alt="Gopher Gains"
-          class="w-8 h-8 object-contain"
-          width="32"
-          height="32"
-        />
-        <div class="flex flex-col leading-none">
-          <span class="text-[13px] font-bold tracking-tight font-display" style="color: var(--color-text);">
-            Gopher<span style="color: var(--color-accent);">Gains</span>
-          </span>
-          <span class="text-[10px] font-mono mt-0.5 tracking-wide uppercase" style="color: var(--color-sidebar-muted);">
+      <div class="flex flex-col px-5 pt-6 pb-5 flex-shrink-0" style="border-bottom: 1px solid var(--color-border);">
+        <div class="flex items-start justify-between mb-3">
+          <img
+            [src]="logoUrl"
+            alt="Gopher Gains"
+            class="w-12 h-12 object-contain"
+            width="48"
+            height="48"
+          />
+          <button
+            (click)="sidebar.close()"
+            class="lg:hidden p-1.5 rounded-md transition-colors mt-0.5"
+            style="color: var(--color-sidebar-muted);"
+            aria-label="Close sidebar"
+          >
+            <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        <p class="text-[15px] font-bold font-display tracking-tight leading-none" style="color: var(--color-text);">
+          Gopher<span style="color: var(--color-accent);">Gains</span>
+        </p>
+        <p class="text-[11px] font-mono mt-1" style="color: var(--color-sidebar-muted);">Fitness Platform</p>
+        <div class="mt-3 inline-flex items-center gap-1.5 px-2 py-1 rounded-md w-fit" style="background-color: rgba(61,184,255,0.1);">
+          <span class="w-1.5 h-1.5 rounded-full flex-shrink-0" style="background-color: var(--color-accent);"></span>
+          <span class="text-[11px] font-mono font-semibold uppercase tracking-wide" style="color: var(--color-accent);">
             {{ currentRole() === 'admin' ? 'Admin' : 'Athlete' }}
           </span>
         </div>
-        <button
-          (click)="sidebar.close()"
-          class="lg:hidden ml-auto p-1.5 rounded-md transition-colors"
-          style="color: var(--color-sidebar-muted);"
-          aria-label="Close sidebar"
-        >
-          <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
-        </button>
       </div>
 
       <!-- Nav -->

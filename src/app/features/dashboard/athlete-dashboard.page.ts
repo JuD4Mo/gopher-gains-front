@@ -21,11 +21,11 @@ const WEEK_DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
   standalone: true,
   imports: [RouterLink, DatePipe, SafeHtmlPipe],
   template: `
-    <div class="p-5 lg:p-8 max-w-[1200px] mx-auto">
+    <div class="p-6 lg:p-10 max-w-[1200px] mx-auto">
 
       <!-- ── Hero zone ── -->
       <div
-        class="relative rounded-2xl overflow-hidden mb-6"
+        class="relative rounded-2xl overflow-hidden mb-8"
         style="background-color: var(--color-card); border: 1px solid var(--color-border);"
       >
         <div class="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl" style="background: linear-gradient(90deg, var(--color-accent) 0%, transparent 60%);"></div>
@@ -35,9 +35,9 @@ const WEEK_DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
             <img
               [src]="mascotCelebrating"
               alt="Gopher ready to train"
-              class="w-20 h-20 object-contain"
-              width="80"
-              height="80"
+              class="w-32 h-32 sm:w-36 sm:h-36 object-contain"
+              width="144"
+              height="144"
             />
           </div>
 
@@ -98,10 +98,10 @@ const WEEK_DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
       </div>
 
       <!-- ── Main content ── -->
-      <div class="flex flex-col lg:flex-row gap-5">
+      <div class="flex flex-col lg:flex-row gap-8">
 
         <!-- Left: routines + sessions -->
-        <div class="flex-1 min-w-0 flex flex-col gap-5">
+        <div class="flex-1 min-w-0 flex flex-col gap-8">
 
           <!-- My Routines -->
           <div class="rounded-xl" style="background-color: var(--color-card); border: 1px solid var(--color-border);">
@@ -197,8 +197,8 @@ const WEEK_DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
         </div>
 
-        <!-- Right: stats + quick nav -->
-        <div class="lg:w-60 flex flex-col gap-5">
+        <!-- Right: stats -->
+        <div class="lg:w-60 flex flex-col gap-8">
 
           <!-- Stats -->
           <div class="rounded-xl" style="background-color: var(--color-card); border: 1px solid var(--color-border);">
@@ -223,30 +223,7 @@ const WEEK_DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
             </div>
           </div>
 
-          <!-- Quick nav -->
-          <div class="rounded-xl" style="background-color: var(--color-card); border: 1px solid var(--color-border);">
-            <div class="px-5 py-4" style="border-bottom: 1px solid var(--color-border);">
-              <p class="text-sm font-semibold font-display" style="color: var(--color-text);">Quick Nav</p>
-            </div>
-            <div class="p-3 space-y-1">
-              @for (nav of quickNav; track nav.label) {
-                <a
-                  [routerLink]="nav.route"
-                  class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group"
-                >
-                  <div
-                    class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-                    [style.background-color]="nav.accent + '20'"
-                    [style.color]="nav.accent"
-                  >
-                    <div class="w-3.5 h-3.5 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="nav.icon | safeHtml"></div>
-                  </div>
-                  <span class="text-[13px] font-medium flex-1" style="color: var(--color-text);">{{ nav.label }}</span>
-                  <span class="w-3.5 h-3.5 [&>svg]:w-full [&>svg]:h-full opacity-0 group-hover:opacity-50 transition-opacity" style="color: var(--color-muted);" [innerHTML]="icons.chevronRight | safeHtml"></span>
-                </a>
-              }
-            </div>
-          </div>
+
 
         </div>
       </div>
@@ -269,13 +246,6 @@ export class AthleteDashboardPage implements OnInit {
   protected readonly exerciseCount     = signal(0);
   protected readonly recentSessions    = signal<WorkoutSession[]>([]);
   protected readonly routines          = signal<Routine[]>([]);
-
-  protected readonly quickNav = [
-    { label: 'Browse Exercises', route: '/exercises', icon: ICONS.exercises, accent: '#1CC8FF' },
-    { label: 'My Routines',      route: '/routines',  icon: ICONS.routines,  accent: '#B794F4' },
-    { label: 'All Sessions',     route: '/sessions',  icon: ICONS.sessions,  accent: '#F6C90E' },
-    { label: 'Start Session',    route: '/sessions/new', icon: ICONS.plus,   accent: '#2DA44E' },
-  ];
 
   ngOnInit() {
     forkJoin({
