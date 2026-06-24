@@ -19,7 +19,7 @@ import { ICONS } from '../../shared/icons';
   standalone: true,
   imports: [FormsModule, DatePipe, CardComponent, EmptyStateComponent, ErrorMessageComponent],
   template: `
-    <div class="space-y-6">
+    <div class="p-5 lg:p-8 space-y-6 max-w-[1400px] mx-auto">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <app-card>
           <div class="p-5">

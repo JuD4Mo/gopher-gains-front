@@ -1,7 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CardComponent } from '../../shared/components/card.component';
 import { ErrorMessageComponent } from '../../shared/components/error-message.component';
 import { RoutineSelectionModalComponent } from './routine-selection-modal.component';
 import { SessionService } from '../../services/session.service';
@@ -16,13 +15,13 @@ import { ICONS } from '../../shared/icons';
 @Component({
   selector: 'app-session-form',
   standalone: true,
-  imports: [RouterLink, FormsModule, CardComponent, ErrorMessageComponent, RoutineSelectionModalComponent, SafeHtmlPipe],
+  imports: [RouterLink, FormsModule, ErrorMessageComponent, RoutineSelectionModalComponent, SafeHtmlPipe],
   template: `
     @if (showRoutineModal()) {
-      <app-routine-selection-modal (routineSelected)="onRoutineSelected($event)" />
+      <app-routine-selection-modal [userId]="userId" (routineSelected)="onRoutineSelected($event)" />
     }
 
-    <div class="max-w-2xl mx-auto space-y-6">
+    <div class="p-5 lg:p-8 max-w-2xl mx-auto space-y-6">
       <div class="flex items-center gap-3">
         <a routerLink="/sessions" class="btn-ghost gap-1.5 text-sm px-2">
           <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.arrowLeft | safeHtml"></span>

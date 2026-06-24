@@ -89,7 +89,7 @@ const MASCOT_THINKING    = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
             <div class="flex flex-col items-start p-8 rounded-2xl" style="background-color: var(--color-surface); border: 1px solid var(--color-border);">
-              <img [src]="mascotClipboard" alt="" class="w-20 h-20 object-contain mb-6" width="80" height="80" aria-hidden="true" />
+              <img [src]="mascotClipboard" alt="" class="w-28 h-28 object-contain mb-6" width="112" height="112" aria-hidden="true" />
               <h3 class="text-[17px] font-bold font-display mb-3" style="color: var(--color-text);">Build your routines</h3>
               <p class="text-[14px] leading-relaxed" style="color: var(--color-muted);">
                 Create routines from your exercise library. Organize sets, reps, and rest times exactly how you want.
@@ -97,7 +97,7 @@ const MASCOT_THINKING    = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.
             </div>
 
             <div class="flex flex-col items-start p-8 rounded-2xl" style="background-color: var(--color-surface); border: 1px solid var(--color-border);">
-              <img [src]="mascotMain" alt="" class="w-20 h-20 object-contain mb-6" width="80" height="80" aria-hidden="true" />
+              <img [src]="mascotMain" alt="" class="w-28 h-28 object-contain mb-6" width="112" height="112" aria-hidden="true" />
               <h3 class="text-[17px] font-bold font-display mb-3" style="color: var(--color-text);">Log every session</h3>
               <p class="text-[14px] leading-relaxed" style="color: var(--color-muted);">
                 Track every workout with precision. Your session history becomes your most valuable training asset.
@@ -105,7 +105,7 @@ const MASCOT_THINKING    = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.
             </div>
 
             <div class="flex flex-col items-start p-8 rounded-2xl" style="background-color: var(--color-surface); border: 1px solid var(--color-border);">
-              <img [src]="mascotCelebrating" alt="" class="w-20 h-20 object-contain mb-6" width="80" height="80" aria-hidden="true" />
+              <img [src]="mascotCelebrating" alt="" class="w-28 h-28 object-contain mb-6" width="112" height="112" aria-hidden="true" />
               <h3 class="text-[17px] font-bold font-display mb-3" style="color: var(--color-text);">See your progress</h3>
               <p class="text-[14px] leading-relaxed" style="color: var(--color-muted);">
                 Personal records, weekly streaks, and consistency metrics. Proof that your hard work is paying off.

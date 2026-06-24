@@ -1,7 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { CardComponent } from '../../shared/components/card.component';
 import { ExerciseService } from '../../services/exercise.service';
 import { RoutineService } from '../../services/routine.service';
 import { UserService } from '../../services/user.service';
@@ -18,7 +17,7 @@ import type { UserRoutine } from '../../models/user-routine.model';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterLink, DatePipe, CardComponent, SafeHtmlPipe, EmptyStateComponent],
+  imports: [RouterLink, DatePipe, SafeHtmlPipe, EmptyStateComponent],
   template: `
     @if (auth.currentRole() === 'admin') {
       <!-- ── ADMIN DASHBOARD ─────────────────────────────── -->

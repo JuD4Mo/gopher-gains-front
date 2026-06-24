@@ -16,7 +16,7 @@ import { ICONS } from '../../shared/icons';
   standalone: true,
   imports: [RouterLink, FormsModule, LoadingSpinnerComponent, EmptyStateComponent, PaginationComponent, ErrorMessageComponent, SafeHtmlPipe],
   template: `
-    <div class="space-y-6">
+    <div class="p-5 lg:p-8 space-y-6 max-w-[1400px] mx-auto">
 
       <!-- Page header -->
       <div class="flex items-center justify-between">

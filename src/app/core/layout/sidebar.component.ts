@@ -35,13 +35,15 @@ const LOGO_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gopher
       <!-- Brand -->
       <div class="flex flex-col px-5 pt-6 pb-5 flex-shrink-0" style="border-bottom: 1px solid var(--color-border);">
         <div class="flex items-start justify-between mb-3">
-          <img
-            [src]="logoUrl"
-            alt="Gopher Gains"
-            class="w-12 h-12 object-contain"
-            width="48"
-            height="48"
-          />
+          <a routerLink="/">
+            <img
+              [src]="logoUrl"
+              alt="Gopher Gains"
+              class="w-12 h-12 object-contain"
+              width="48"
+              height="48"
+            />
+          </a>
           <button
             (click)="sidebar.close()"
             class="lg:hidden p-1.5 rounded-md transition-colors mt-0.5"

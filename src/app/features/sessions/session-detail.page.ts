@@ -24,7 +24,7 @@ import { ICONS } from '../../shared/icons';
   standalone: true,
   imports: [RouterLink, FormsModule, DatePipe, CardComponent, LoadingSpinnerComponent, ErrorMessageComponent, EmptyStateComponent, StatusBadgeComponent, ExerciseSectionComponent, SafeHtmlPipe],
   template: `
-    <div class="space-y-6">
+    <div class="p-5 lg:p-8 space-y-6 max-w-[1400px] mx-auto">
       <div class="flex items-center gap-3">
         <a routerLink="/sessions" class="btn-ghost px-0 text-sm gap-1.5">
           <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.arrowLeft | safeHtml"></span>
@@ -210,7 +210,8 @@ export class SessionDetailPage implements OnInit {
   protected addSet() {
     if (!this.newSet.exerciseId) { this.setError.set('Please select an exercise'); return; }
     this.setError.set(null);
-    this.exerciseSetService.create({ wsessionId: this.sessionId, ...this.newSet }).subscribe({
+    const stepNumber = this.sets().filter((s) => s.exerciseId === this.newSet.exerciseId).length + 1;
+    this.exerciseSetService.create({ wsessionId: this.sessionId, ...this.newSet, stepNumber }).subscribe({
       next: () => { this.showAddForm.set(false); this.newSet = { exerciseId: 0, weight: 0, repetitions: 0, rir: 3 }; this.loadSets(); },
       error: (err) => this.setError.set(err.error?.message ?? err.message),
     });

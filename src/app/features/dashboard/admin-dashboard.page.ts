@@ -1,6 +1,5 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { DatePipe } from '@angular/common';
 import { ExerciseService } from '../../services/exercise.service';
 import { RoutineService } from '../../services/routine.service';
 import { UserService } from '../../services/user.service';
@@ -29,7 +28,7 @@ interface ActivityItem {
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [RouterLink, DatePipe, SafeHtmlPipe],
+  imports: [RouterLink, SafeHtmlPipe],
   template: `
     <div class="p-5 lg:p-8 max-w-[1400px] mx-auto">
 

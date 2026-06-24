@@ -2,7 +2,6 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-import { CardComponent } from '../../shared/components/card.component';
 import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner.component';
 import { EmptyStateComponent } from '../../shared/components/empty-state.component';
 import { PaginationComponent } from '../../shared/components/pagination.component';
@@ -19,9 +18,9 @@ import { ICONS } from '../../shared/icons';
 @Component({
   selector: 'app-session-list',
   standalone: true,
-  imports: [RouterLink, FormsModule, DatePipe, CardComponent, LoadingSpinnerComponent, EmptyStateComponent, PaginationComponent, ErrorMessageComponent, StatusBadgeComponent, SafeHtmlPipe],
+  imports: [RouterLink, FormsModule, DatePipe, LoadingSpinnerComponent, EmptyStateComponent, PaginationComponent, ErrorMessageComponent, StatusBadgeComponent, SafeHtmlPipe],
   template: `
-    <div class="space-y-6">
+    <div class="p-5 lg:p-8 space-y-6 max-w-[1400px] mx-auto">
 
       <!-- Page header -->
       <div class="flex items-center justify-between">

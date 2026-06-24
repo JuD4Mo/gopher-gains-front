@@ -14,7 +14,7 @@ import { ICONS } from '../../shared/icons';
   standalone: true,
   imports: [RouterLink, FormsModule, CardComponent, ErrorMessageComponent, SafeHtmlPipe],
   template: `
-    <div class="max-w-2xl mx-auto space-y-6">
+    <div class="p-5 lg:p-8 max-w-2xl mx-auto space-y-6">
       <div class="flex items-center gap-3">
         <a [routerLink]="['/routines', routineId]" class="btn-ghost px-0 text-sm gap-1.5">
           <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.arrowLeft | safeHtml"></span>

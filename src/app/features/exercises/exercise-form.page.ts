@@ -1,7 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CardComponent } from '../../shared/components/card.component';
 import { ErrorMessageComponent } from '../../shared/components/error-message.component';
 import { ExerciseService } from '../../services/exercise.service';
 import { ToastService } from '../../shared/services/toast.service';
@@ -13,9 +12,9 @@ import { ICONS } from '../../shared/icons';
 @Component({
   selector: 'app-exercise-form',
   standalone: true,
-  imports: [RouterLink, FormsModule, CardComponent, ErrorMessageComponent, SafeHtmlPipe],
+  imports: [RouterLink, FormsModule, ErrorMessageComponent, SafeHtmlPipe],
   template: `
-    <div class="max-w-2xl mx-auto space-y-6">
+    <div class="p-5 lg:p-8 max-w-2xl mx-auto space-y-6">
       <!-- Breadcrumb header -->
       <div class="flex items-center gap-3">
         <a routerLink="/exercises" class="btn-ghost gap-1.5 text-sm px-2">

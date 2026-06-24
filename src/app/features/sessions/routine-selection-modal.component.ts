@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit, output } from '@angular/core';
+import { Component, inject, signal, input, OnInit, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CardComponent } from '../../shared/components/card.component';
 import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner.component';
@@ -146,6 +146,8 @@ export class RoutineSelectionModalComponent implements OnInit {
 
   protected readonly icons = ICONS;
 
+  readonly userId = input.required<number>();
+
   protected readonly routineSelected = output<Routine | null>();
   protected readonly loading = signal(true);
   protected readonly assigning = signal(false);
@@ -157,10 +159,27 @@ export class RoutineSelectionModalComponent implements OnInit {
   protected readonly suggestedRoutines = signal<RoutineWithExerciseCount[]>([]);
   protected readonly filteredRoutines = signal<RoutineWithExerciseCount[]>([]);
 
-  private userId = 1;
+  private readonly assignedRoutineIds = signal<Set<number>>(new Set());
 
   ngOnInit() {
-    this.loadRoutines();
+    this.loadUserRoutines();
+  }
+
+  private loadUserRoutines() {
+    const uid = this.userId();
+    if (!uid) {
+      this.loadRoutines();
+      return;
+    }
+    this.userRoutineService.getByUser(uid).pipe(catchError(() => of(null))).subscribe({
+      next: (res) => {
+        if (res?.data) {
+          this.assignedRoutineIds.set(new Set(res.data.map((r) => r.routineId)));
+        }
+        this.loadRoutines();
+      },
+      error: () => this.loadRoutines(),
+    });
   }
 
   private loadRoutines() {
@@ -184,8 +203,9 @@ export class RoutineSelectionModalComponent implements OnInit {
               exerciseCount: exerciseResults[i]?.data?.length ?? 0,
             }));
 
+            const assigned = this.assignedRoutineIds();
             this.allRoutines.set(routinesWithCounts);
-            this.suggestedRoutines.set(routinesWithCounts.filter((r) => r.type === 'default').slice(0, 4));
+            this.suggestedRoutines.set(routinesWithCounts.filter((r) => assigned.has(r.id)).slice(0, 4));
             this.filteredRoutines.set(routinesWithCounts);
             this.loading.set(false);
           },
@@ -195,10 +215,21 @@ export class RoutineSelectionModalComponent implements OnInit {
   }
 
   protected selectRoutine(routine: Routine) {
+    if (this.assignedRoutineIds().has(routine.id)) {
+      this.routineSelected.emit(routine);
+      return;
+    }
+
+    const uid = this.userId();
+    if (!uid) {
+      this.routineSelected.emit(routine);
+      return;
+    }
+
     this.assigning.set(true);
     this.error.set(null);
 
-    this.userRoutineService.assign({ userId: this.userId, routineId: routine.id }).subscribe({
+    this.userRoutineService.assign({ userId: uid, routineId: routine.id }).subscribe({
       next: () => {
         this.toast.show('Routine assigned!');
         this.routineSelected.emit(routine);
