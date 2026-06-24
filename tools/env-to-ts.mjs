@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -52,6 +52,7 @@ const prodContent = `export const environment = {
 `;
 
 const envDir = resolve(root, 'src/environments');
+mkdirSync(envDir, { recursive: true });
 writeFileSync(resolve(envDir, 'environment.ts'), devContent);
 writeFileSync(resolve(envDir, 'environment.prod.ts'), prodContent);
 
