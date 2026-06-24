@@ -12,7 +12,7 @@ interface NavItem {
   adminOnly?: boolean;
 }
 
-const LOGO_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gopher-Gains-Logo-v1-0YQbpRo1RgZh5Y4xCIgIkgMV9hxr97.png';
+const LOGO_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gopher-Gains-Logo-v1-Photoroom-WfSlqGUxq90Xa0oAPjDPNoaGcCYtXQ.png';
 
 @Component({
   selector: 'app-sidebar',
@@ -21,57 +21,58 @@ const LOGO_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gopher
   template: `
     @if (sidebar.open()) {
       <div
-        class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden"
+        class="fixed inset-0 z-30 bg-black/70 backdrop-blur-sm lg:hidden"
         (click)="sidebar.close()"
         role="presentation"
       ></div>
     }
 
     <aside
-      class="fixed top-0 left-0 z-40 h-dvh w-sidebar flex flex-col select-none transition-transform duration-250 -translate-x-full lg:translate-x-0"
+      class="fixed top-0 left-0 z-40 h-dvh w-sidebar flex flex-col select-none transition-transform duration-300 -translate-x-full lg:translate-x-0"
       [class.translate-x-0]="sidebar.open()"
       style="background-color: var(--color-sidebar); border-right: 1px solid var(--color-border);"
     >
-      <!-- Header: horizontal brand lockup -->
-      <div class="relative flex items-center gap-3 px-4 py-4 border-b" style="border-color: var(--color-border);">
-        <!-- Logo mark -->
-        <img
-          [src]="logoUrl"
-          alt="Gopher Gains logo"
-          class="w-10 h-10 flex-shrink-0 object-contain"
-          width="40"
-          height="40"
-        />
-        <!-- Wordmark: always white on the dark sidebar in both themes -->
-        <div class="flex flex-col leading-none">
-          <span class="text-base font-bold tracking-tight font-display" style="color: #E6EDF3;">
-            Gopher <span style="color: var(--color-accent);">Gains</span>
-          </span>
-          <span class="text-[10px] font-mono mt-0.5" style="color: #5A6A80;">Fitness Tracker</span>
+      <!-- Brand -->
+      <div class="flex flex-col px-5 pt-6 pb-5 flex-shrink-0" style="border-bottom: 1px solid var(--color-border);">
+        <div class="flex items-start justify-between mb-3">
+          <img
+            [src]="logoUrl"
+            alt="Gopher Gains"
+            class="w-12 h-12 object-contain"
+            width="48"
+            height="48"
+          />
+          <button
+            (click)="sidebar.close()"
+            class="lg:hidden p-1.5 rounded-md transition-colors mt-0.5"
+            style="color: var(--color-sidebar-muted);"
+            aria-label="Close sidebar"
+          >
+            <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
         </div>
-        <!-- Close button mobile -->
-        <button
-          (click)="sidebar.close()"
-          class="lg:hidden absolute top-1/2 -translate-y-1/2 right-3 p-1.5 rounded-lg transition-colors"
-          style="color: var(--color-sidebar-muted);"
-          aria-label="Close sidebar"
-        >
-          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
-        </button>
+        <p class="text-[15px] font-bold font-display tracking-tight leading-none" style="color: var(--color-text);">
+          Gopher<span style="color: var(--color-accent);">Gains</span>
+        </p>
+        <p class="text-[11px] font-mono mt-1" style="color: var(--color-sidebar-muted);">Fitness Platform</p>
+        <div class="mt-3 inline-flex items-center gap-1.5 px-2 py-1 rounded-md w-fit" style="background-color: rgba(61,184,255,0.1);">
+          <span class="w-1.5 h-1.5 rounded-full flex-shrink-0" style="background-color: var(--color-accent);"></span>
+          <span class="text-[11px] font-mono font-semibold uppercase tracking-wide" style="color: var(--color-accent);">
+            {{ currentRole() === 'admin' ? 'Admin' : 'Athlete' }}
+          </span>
+        </div>
       </div>
 
-      <!-- Nav items -->
-      <nav class="flex-1 overflow-y-auto py-3 px-3" role="navigation" aria-label="Main navigation">
-        <!-- Main section -->
-        <div class="mb-1">
-          <p class="px-3 mb-1 text-[10px] font-semibold uppercase tracking-widest" style="color: #3A4A5A;">Workspace</p>
-          @for (item of mainItems(); track item.route) {
+      <!-- Nav -->
+      <nav class="flex-1 overflow-y-auto py-4 px-3" role="navigation" aria-label="Main navigation">
+        <div class="space-y-0.5">
+          @for (item of primaryItems(); track item.route) {
             <a
               [routerLink]="item.route"
               (click)="sidebar.close()"
-              class="group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 relative"
+              class="group flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-all duration-150 relative"
               [class.nav-active]="isActive(item.route)"
               [class.nav-inactive]="!isActive(item.route)"
               [attr.aria-current]="isActive(item.route) ? 'page' : null"
@@ -79,48 +80,55 @@ const LOGO_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gopher
               @if (isActive(item.route)) {
                 <span class="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r" style="background-color: var(--color-accent);"></span>
               }
-              <span class="w-5 h-5 flex-shrink-0 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="item.icon | safeHtml"></span>
+              <span class="w-[18px] h-[18px] flex-shrink-0 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="item.icon | safeHtml"></span>
               <span>{{ item.label }}</span>
             </a>
           }
         </div>
 
-        <!-- Admin-only section -->
-        @if (adminItems().length > 0) {
-          <div class="mt-4">
-            <p class="px-3 mb-1 text-[10px] font-semibold uppercase tracking-widest" style="color: #3A4A5A;">Admin</p>
-            @for (item of adminItems(); track item.route) {
-              <a
-                [routerLink]="item.route"
-                (click)="sidebar.close()"
-                class="group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 relative"
-                [class.nav-active]="isActive(item.route)"
-                [class.nav-inactive]="!isActive(item.route)"
-                [attr.aria-current]="isActive(item.route) ? 'page' : null"
-              >
-                @if (isActive(item.route)) {
-                  <span class="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r" style="background-color: var(--color-accent);"></span>
-                }
-                <span class="w-5 h-5 flex-shrink-0 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="item.icon | safeHtml"></span>
-                <span>{{ item.label }}</span>
-              </a>
-            }
+        @if (manageItems().length > 0) {
+          <div class="mt-6">
+            <p class="px-3 mb-2 text-[10px] font-semibold uppercase tracking-[0.1em]" style="color: var(--color-sidebar-muted);">Manage</p>
+            <div class="space-y-0.5">
+              @for (item of manageItems(); track item.route) {
+                <a
+                  [routerLink]="item.route"
+                  (click)="sidebar.close()"
+                  class="group flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-all duration-150 relative"
+                  [class.nav-active]="isActive(item.route)"
+                  [class.nav-inactive]="!isActive(item.route)"
+                  [attr.aria-current]="isActive(item.route) ? 'page' : null"
+                >
+                  @if (isActive(item.route)) {
+                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r" style="background-color: var(--color-accent);"></span>
+                  }
+                  <span class="w-[18px] h-[18px] flex-shrink-0 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="item.icon | safeHtml"></span>
+                  <span>{{ item.label }}</span>
+                </a>
+              }
+            </div>
           </div>
         }
       </nav>
 
-      <!-- Footer -->
-      <div class="px-5 py-4 border-t" style="border-color: var(--color-border);">
-        <div class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-          <span class="text-xs font-mono" style="color: var(--color-sidebar-muted);">Connected</span>
-        </div>
+      <!-- Footer: logout -->
+      <div class="px-4 py-4 flex-shrink-0" style="border-top: 1px solid var(--color-border);">
+        <button
+          (click)="logout()"
+          class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-all duration-150"
+          style="color: var(--color-sidebar-muted);"
+        >
+          <svg viewBox="0 0 24 24" class="w-[18px] h-[18px] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          <span>Sign out</span>
+        </button>
       </div>
     </aside>
 
     <style>
       .nav-active {
-        background-color: var(--color-accent-dim);
+        background-color: rgba(28,200,255,0.1);
         color: var(--color-accent);
       }
       .nav-inactive {
@@ -139,40 +147,40 @@ export class SidebarComponent {
   private readonly auth = inject(AuthService);
 
   protected readonly logoUrl = LOGO_URL;
+  protected readonly currentRole = this.auth.currentRole;
 
   private readonly allNavItems: NavItem[] = [
-    { label: 'Dashboard', route: '/', icon: ICONS.dashboard },
-    { label: 'Exercises', route: '/exercises', icon: ICONS.exercises },
-    { label: 'Routines', route: '/routines', icon: ICONS.routines },
-    { label: 'Sessions', route: '/sessions', icon: ICONS.sessions },
-    { label: 'Users', route: '/users', icon: ICONS.users, adminOnly: true },
-    { label: 'Assignments', route: '/assignments', icon: ICONS.assignments, adminOnly: true },
+    { label: 'Dashboard',   route: '/admin',       icon: ICONS.dashboard },
+    { label: 'My Dashboard',route: '/my',           icon: ICONS.dashboard },
+    { label: 'Exercises',   route: '/exercises',    icon: ICONS.exercises },
+    { label: 'Routines',    route: '/routines',     icon: ICONS.routines },
+    { label: 'Sessions',    route: '/sessions',     icon: ICONS.sessions },
+    { label: 'Users',       route: '/users',        icon: ICONS.users,       adminOnly: true },
+    { label: 'Assignments', route: '/assignments',  icon: ICONS.assignments, adminOnly: true },
   ];
 
-  private readonly allMapped = computed(() => {
+  protected readonly primaryItems = computed(() => {
     const role = this.auth.currentRole();
-    const dashboardRoute = role === 'admin' ? '/admin' : '/my';
-    return this.allNavItems.map(item =>
-      item.label === 'Dashboard' ? { ...item, route: dashboardRoute } : item
-    );
+    if (role === 'admin') {
+      return this.allNavItems.filter(i => ['/admin', '/exercises', '/routines', '/sessions'].includes(i.route));
+    }
+    return this.allNavItems.filter(i => ['/my', '/exercises', '/routines', '/sessions'].includes(i.route));
   });
 
-  protected readonly mainItems = computed(() =>
-    this.allMapped().filter(item => !item.adminOnly)
-  );
+  protected readonly manageItems = computed(() => {
+    if (this.auth.currentRole() !== 'admin') return [];
+    return this.allNavItems.filter(i => i.adminOnly);
+  });
 
-  protected readonly adminItems = computed(() =>
-    this.allMapped().filter(item => item.adminOnly && this.auth.currentRole() === 'admin')
-  );
-
-  protected readonly exactRoutes = new Set(['/admin', '/my']);
-
-  protected isExactRoute(route: string): boolean {
-    return this.exactRoutes.has(route);
-  }
+  private readonly exactRoutes = new Set(['/admin', '/my']);
 
   protected isActive(route: string): boolean {
-    if (this.isExactRoute(route)) return this.router.url === route;
+    if (this.exactRoutes.has(route)) return this.router.url === route;
     return this.router.url.startsWith(route);
+  }
+
+  logout(): void {
+    this.auth.logout();
+    this.router.navigate(['/login']);
   }
 }

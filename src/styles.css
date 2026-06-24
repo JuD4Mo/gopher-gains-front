@@ -5,19 +5,19 @@
 /* ─── CSS design tokens ───────────────────────────────── */
 :root {
   /* dark theme is the default */
-  --color-base:         #0D1117;
-  --color-surface:      #161B22;
-  --color-card:         #1C2230;
-  --color-card-hover:   #212840;
-  --color-border:       #2A3347;
-  --color-text:         #E6EDF3;
-  --color-muted:        #7D8FA8;
-  --color-sidebar:      #111827;
-  --color-sidebar-hover:#1E2A3A;
+  --color-base:         #101418;
+  --color-surface:      #1A1F29;
+  --color-card:         #242B36;
+  --color-card-hover:   #2A3240;
+  --color-border:       #313A4A;
+  --color-text:         #F8FAFC;
+  --color-muted:        #A0AEC0;
+  --color-sidebar:      #0E1219;
+  --color-sidebar-hover:#1E2535;
   --color-sidebar-muted:#5A6A80;
-  --color-accent:       #00ACD7;
-  --color-accent-dark:  #0090B8;
-  --color-accent-dim:   rgba(0,172,215,0.12);
+  --color-accent:       #3DB8FF;
+  --color-accent-dark:  #1AA0E8;
+  --color-accent-dim:   rgba(61,184,255,0.12);
 }
 
 .light {
@@ -26,13 +26,13 @@
   --color-card:         #FFFFFF;
   --color-card-hover:   #F7FAFC;
   --color-border:       #D1DCE8;
-  --color-text:         #0D1117;
+  --color-text:         #0A0F1A;
   --color-muted:        #627080;
-  --color-sidebar:      #0D1117;
+  --color-sidebar:      #0A0F1A;
   --color-sidebar-hover:#1A2535;
   --color-sidebar-muted:#8EA0B4;
   --color-accent:       #00ACD7;
-  --color-accent-dark:  #0090B8;
+  --color-accent-dark:  #0088C0;
   --color-accent-dim:   rgba(0,172,215,0.10);
 }
 
@@ -52,7 +52,7 @@
   }
 
   ::selection {
-    background-color: rgba(0, 172, 215, 0.2);
+    background-color: rgba(61, 184, 255, 0.2);
     color: var(--color-text);
   }
 
@@ -86,12 +86,11 @@
   }
 
   .btn-primary {
-    @apply btn text-white font-semibold shadow-accent-glow-sm;
+    @apply btn text-white font-semibold;
     background-color: var(--color-accent);
   }
   .btn-primary:hover:not(:disabled) {
     background-color: var(--color-accent-dark);
-    box-shadow: 0 0 12px rgba(0,172,215,0.4);
   }
   .btn-primary:active:not(:disabled) {
     background-color: var(--color-accent-dark);
@@ -151,7 +150,6 @@
     @apply rounded-xl transition-all duration-150;
     background-color: var(--color-card);
     border: 1px solid var(--color-border);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.2);
   }
 
   /* Table */
@@ -182,5 +180,16 @@
   .stat-number {
     @apply text-3xl font-bold font-display tracking-tight;
     color: var(--color-text);
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background-color: var(--color-border);
+  }
+
+  /* Pill badge */
+  .pill {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold font-mono;
   }
 }

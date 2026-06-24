@@ -12,11 +12,11 @@ import { ThemeService } from '../services/theme.service';
   standalone: true,
   imports: [RouterOutlet, SidebarComponent, TopBarComponent, ToastComponent],
   template: `
-    <div class="min-h-dvh" style="background-color: var(--color-base);">
+    <div class="min-h-dvh flex" style="background-color: var(--color-base);">
       <app-sidebar />
-      <div class="lg:ml-sidebar min-h-dvh flex flex-col">
+      <div class="lg:ml-sidebar flex-1 min-h-dvh flex flex-col min-w-0">
         <app-top-bar [title]="pageTitle()" />
-        <main class="flex-1 p-5 lg:p-7">
+        <main class="flex-1 overflow-auto">
           <router-outlet />
         </main>
       </div>
@@ -28,7 +28,6 @@ export class DefaultLayoutComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  // Inject theme so it initializes on app start
   private readonly _theme = inject(ThemeService);
   readonly pageTitle = signal('');
 
