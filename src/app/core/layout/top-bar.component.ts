@@ -1,6 +1,5 @@
 import { Component, input, inject } from '@angular/core';
 import { SidebarService } from './sidebar.service';
-import { AuthService } from '../services/auth.service';
 import { ThemeService } from '../services/theme.service';
 
 @Component({
@@ -8,7 +7,7 @@ import { ThemeService } from '../services/theme.service';
   standalone: true,
   template: `
     <header
-      class="h-16 flex items-center justify-between px-5 lg:px-7 flex-shrink-0"
+      class="h-14 flex items-center justify-between px-5 lg:px-7 flex-shrink-0"
       style="background-color: var(--color-surface); border-bottom: 1px solid var(--color-border);"
     >
       <!-- Left: hamburger + breadcrumb -->
@@ -26,17 +25,12 @@ import { ThemeService } from '../services/theme.service';
           </svg>
         </button>
         @if (title()) {
-          <div class="flex items-center gap-2">
-            <span class="text-[13px] font-medium" style="color: var(--color-muted);">Gopher Gains</span>
-            <span style="color: var(--color-border);">/</span>
-            <span class="text-[13px] font-semibold" style="color: var(--color-text);">{{ title() }}</span>
-          </div>
+          <span class="text-[13px] font-semibold" style="color: var(--color-text);">{{ title() }}</span>
         }
       </div>
 
-      <!-- Right -->
+      <!-- Right: theme toggle -->
       <div class="flex items-center gap-2">
-        <!-- Theme toggle -->
         <button
           (click)="theme.toggle()"
           class="p-2 rounded-lg transition-all"
@@ -54,17 +48,6 @@ import { ThemeService } from '../services/theme.service';
             </svg>
           }
         </button>
-
-        <!-- Role indicator -->
-        <div
-          class="flex items-center gap-1.5 px-2.5 py-1 rounded-md"
-          style="background-color: var(--color-accent-dim); border: 1px solid rgba(0,172,215,0.15);"
-        >
-          <span class="w-1.5 h-1.5 rounded-full flex-shrink-0" style="background-color: var(--color-accent);"></span>
-          <span class="text-[11px] font-bold font-mono hidden sm:inline" style="color: var(--color-accent);">
-            {{ auth.currentRole() }}
-          </span>
-        </div>
       </div>
     </header>
   `,
@@ -72,6 +55,5 @@ import { ThemeService } from '../services/theme.service';
 export class TopBarComponent {
   readonly title = input<string>('');
   protected readonly sidebar = inject(SidebarService);
-  protected readonly auth = inject(AuthService);
-  protected readonly theme = inject(ThemeService);
+  protected readonly theme   = inject(ThemeService);
 }

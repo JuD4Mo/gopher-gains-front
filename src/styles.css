@@ -5,19 +5,19 @@
 /* ─── CSS design tokens ───────────────────────────────── */
 :root {
   /* dark theme is the default */
-  --color-base:         #0D1117;
-  --color-surface:      #161B22;
-  --color-card:         #1C2230;
-  --color-card-hover:   #212840;
-  --color-border:       #2A3347;
-  --color-text:         #E6EDF3;
-  --color-muted:        #7D8FA8;
-  --color-sidebar:      #111827;
-  --color-sidebar-hover:#1E2A3A;
-  --color-sidebar-muted:#5A6A80;
-  --color-accent:       #00ACD7;
-  --color-accent-dark:  #0090B8;
-  --color-accent-dim:   rgba(0,172,215,0.12);
+  --color-base:         #0A0F1A;
+  --color-surface:      #131B2E;
+  --color-card:         #1A2338;
+  --color-card-hover:   #1F2A42;
+  --color-border:       #263147;
+  --color-text:         #F5F7FA;
+  --color-muted:        #93A4BD;
+  --color-sidebar:      #0D1323;
+  --color-sidebar-hover:#18243A;
+  --color-sidebar-muted:#4A5A72;
+  --color-accent:       #1CC8FF;
+  --color-accent-dark:  #00ACD7;
+  --color-accent-dim:   rgba(28,200,255,0.12);
 }
 
 .light {
@@ -26,13 +26,13 @@
   --color-card:         #FFFFFF;
   --color-card-hover:   #F7FAFC;
   --color-border:       #D1DCE8;
-  --color-text:         #0D1117;
+  --color-text:         #0A0F1A;
   --color-muted:        #627080;
-  --color-sidebar:      #0D1117;
+  --color-sidebar:      #0A0F1A;
   --color-sidebar-hover:#1A2535;
   --color-sidebar-muted:#8EA0B4;
   --color-accent:       #00ACD7;
-  --color-accent-dark:  #0090B8;
+  --color-accent-dark:  #0088C0;
   --color-accent-dim:   rgba(0,172,215,0.10);
 }
 
