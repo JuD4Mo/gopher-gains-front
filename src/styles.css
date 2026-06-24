@@ -183,4 +183,15 @@
     @apply text-3xl font-bold font-display tracking-tight;
     color: var(--color-text);
   }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background-color: var(--color-border);
+  }
+
+  /* Pill badge */
+  .pill {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold font-mono;
+  }
 }

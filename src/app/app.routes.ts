@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { DefaultLayoutComponent } from './core/layout/default-layout.component';
-import { DashboardPage } from './features/dashboard/dashboard.page';
+import { AdminDashboardPage } from './features/dashboard/admin-dashboard.page';
+import { AthleteDashboardPage } from './features/dashboard/athlete-dashboard.page';
 import { ExerciseListPage } from './features/exercises/exercise-list.page';
 import { ExerciseFormPage } from './features/exercises/exercise-form.page';
 import { RoutineListPage } from './features/routines/routine-list.page';
@@ -20,8 +21,8 @@ export const routes: Routes = [
     path: '',
     component: DefaultLayoutComponent,
     children: [
-      { path: 'admin', component: DashboardPage, title: 'Dashboard' },
-      { path: 'my', component: DashboardPage, title: 'My Dashboard' },
+      { path: 'admin', component: AdminDashboardPage, title: 'Dashboard' },
+      { path: 'my', component: AthleteDashboardPage, title: 'My Dashboard' },
       { path: 'exercises', component: ExerciseListPage, title: 'Exercises' },
       { path: 'exercises/new', component: ExerciseFormPage, title: 'New Exercise' },
       { path: 'exercises/:id', component: ExerciseFormPage, title: 'Edit Exercise' },
