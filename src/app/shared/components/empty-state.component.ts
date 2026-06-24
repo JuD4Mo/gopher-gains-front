@@ -6,10 +6,17 @@ import { SafeHtmlPipe } from '../safe-html.pipe';
   standalone: true,
   imports: [SafeHtmlPipe],
   template: `
-    <div class="flex flex-col items-center justify-center py-16 text-center">
-      <div class="w-12 h-12 mb-4 text-border [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icon() | safeHtml"></div>
-      <h3 class="text-base font-semibold text-text mb-1">{{ title() }}</h3>
-      <p class="text-sm text-text-muted max-w-sm">{{ message() }}</p>
+    <div class="flex flex-col items-center justify-center py-16 text-center gap-3">
+      <div
+        class="w-12 h-12 rounded-xl flex items-center justify-center [&>svg]:w-6 [&>svg]:h-6"
+        style="background-color: var(--color-accent-dim); color: var(--color-accent);"
+        [innerHTML]="icon() | safeHtml"
+        aria-hidden="true"
+      ></div>
+      <div>
+        <h3 class="text-sm font-semibold font-display" style="color: var(--color-text);">{{ title() }}</h3>
+        <p class="text-sm mt-1 max-w-xs" style="color: var(--color-muted);">{{ message() }}</p>
+      </div>
     </div>
   `,
 })

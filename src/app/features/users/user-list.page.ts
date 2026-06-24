@@ -18,12 +18,17 @@ import { ICONS } from '../../shared/icons';
   imports: [RouterLink, FormsModule, CardComponent, LoadingSpinnerComponent, EmptyStateComponent, PaginationComponent, ErrorMessageComponent, SafeHtmlPipe],
   template: `
     <div class="space-y-6">
+
+      <!-- Page header -->
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-success/10 flex items-center justify-center">
-            <div class="w-4 h-4 text-success [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.users | safeHtml"></div>
+          <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background-color: rgba(86,211,100,0.12); color: #56D364;">
+            <div class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.users | safeHtml"></div>
           </div>
-          <h2 class="text-xl font-bold font-display text-text">Users</h2>
+          <div>
+            <h2 class="text-lg font-bold font-display leading-none" style="color: var(--color-text);">Users</h2>
+            <p class="text-xs font-mono mt-0.5" style="color: var(--color-muted);">Registered members</p>
+          </div>
         </div>
         <a routerLink="/users/new" class="btn-primary">
           <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.plus | safeHtml"></span>
@@ -31,45 +36,66 @@ import { ICONS } from '../../shared/icons';
         </a>
       </div>
 
-      <app-card [accentColor]="'success'">
-        <div class="p-5">
-          <div class="relative mb-4">
-            <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none w-4 h-full [&>svg]:w-4 [&>svg]:h-4 text-text-muted" [innerHTML]="icons.search | safeHtml"></div>
-            <input [(ngModel)]="nameFilter" (input)="onFilterChange()" placeholder="Search users..." class="w-full pl-9 pr-3 py-2 text-sm border border-border rounded-lg bg-surface-light focus:bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none" />
+      <!-- Table card -->
+      <div class="card">
+        <!-- Filter -->
+        <div class="p-5" style="border-bottom: 1px solid var(--color-border);">
+          <div class="relative max-w-xs">
+            <div
+              class="absolute inset-y-0 left-3 flex items-center pointer-events-none [&>svg]:w-4 [&>svg]:h-4"
+              style="color: var(--color-muted);"
+              [innerHTML]="icons.search | safeHtml"
+            ></div>
+            <input [(ngModel)]="nameFilter" (input)="onFilterChange()" placeholder="Search users..." class="input pl-9" />
           </div>
-
-          @if (loading()) { <app-loading-spinner /> }
-          @else if (error()) { <app-error-message [message]="error()" /> }
-          @else if (users().length === 0) { <app-empty-state [icon]="icons.emptyBox" title="No users yet" message="Register your first user." /> }
-          @else {
-            <div class="overflow-x-auto -mx-5">
-              <table class="w-full text-sm">
-                <thead>
-                  <tr class="border-b border-border">
-                    <th class="text-left py-3 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">Name</th>
-                    <th class="text-left py-3 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">Email</th>
-                    <th class="text-right py-3 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (u of users(); track u.id) {
-                    <tr class="border-b border-border/50 hover:bg-surface-light transition-colors">
-                      <td class="py-3 px-5 font-medium text-text">{{ u.name }} {{ u.lastName }}</td>
-                      <td class="py-3 px-5 text-text-muted">{{ u.email }}</td>
-                      <td class="py-3 px-5 text-right">
-                        <a [routerLink]="['/users', u.id]" class="btn-ghost text-sm px-3 py-1.5 rounded-lg" aria-label="Edit {{ u.name }} {{ u.lastName }}">
-                          <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.edit | safeHtml"></span>
-                        </a>
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
-            <app-pagination [meta]="pagination()" (pageChange)="onPageChange($event)" />
-          }
         </div>
-      </app-card>
+
+        @if (loading()) { <app-loading-spinner /> }
+        @else if (error()) { <app-error-message [message]="error()" /> }
+        @else if (users().length === 0) { <app-empty-state [icon]="icons.emptyBox" title="No users yet" message="Register your first user." /> }
+        @else {
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr>
+                  <th class="table-header-cell">Name</th>
+                  <th class="table-header-cell hidden sm:table-cell">Email</th>
+                  <th class="table-header-cell text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (u of users(); track u.id) {
+                  <tr class="table-row">
+                    <td class="table-cell">
+                      <div class="flex items-center gap-3">
+                        <div
+                          class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold font-mono flex-shrink-0"
+                          style="background-color: var(--color-accent-dim); color: var(--color-accent);"
+                        >{{ u.name.charAt(0).toUpperCase() }}{{ u.lastName.charAt(0).toUpperCase() }}</div>
+                        <span class="font-medium">{{ u.name }} {{ u.lastName }}</span>
+                      </div>
+                    </td>
+                    <td class="table-cell hidden sm:table-cell font-mono" style="color: var(--color-muted);">{{ u.email }}</td>
+                    <td class="table-cell text-right">
+                      <a
+                        [routerLink]="['/users', u.id]"
+                        class="btn-ghost text-xs px-2.5 py-1.5"
+                        [attr.aria-label]="'Edit ' + u.name + ' ' + u.lastName"
+                      >
+                        <span class="w-3.5 h-3.5 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.edit | safeHtml"></span>
+                        Edit
+                      </a>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          <div class="px-5 pb-5">
+            <app-pagination [meta]="pagination()" (pageChange)="onPageChange($event)" />
+          </div>
+        }
+      </div>
     </div>
   `,
 })

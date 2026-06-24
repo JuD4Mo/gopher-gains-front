@@ -22,12 +22,17 @@ import { ICONS } from '../../shared/icons';
   imports: [RouterLink, FormsModule, DatePipe, CardComponent, LoadingSpinnerComponent, EmptyStateComponent, PaginationComponent, ErrorMessageComponent, StatusBadgeComponent, SafeHtmlPipe],
   template: `
     <div class="space-y-6">
+
+      <!-- Page header -->
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
-            <div class="w-4 h-4 text-accent [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.sessions | safeHtml"></div>
+          <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background-color: rgba(246,201,14,0.12); color: #F6C90E;">
+            <div class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.sessions | safeHtml"></div>
           </div>
-          <h2 class="text-xl font-bold font-display text-text">Workout Sessions</h2>
+          <div>
+            <h2 class="text-lg font-bold font-display leading-none" style="color: var(--color-text);">Sessions</h2>
+            <p class="text-xs font-mono mt-0.5" style="color: var(--color-muted);">Workout history</p>
+          </div>
         </div>
         <a routerLink="/sessions/new" class="btn-primary">
           <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.plus | safeHtml"></span>
@@ -35,52 +40,64 @@ import { ICONS } from '../../shared/icons';
         </a>
       </div>
 
-      <app-card [accentColor]="'accent'">
-        <div class="p-5">
-          <div class="flex items-center gap-3 mb-4">
-            <select [(ngModel)]="statusFilter" (change)="onFilterChange()" class="px-3 py-2 text-sm border border-border rounded-lg bg-surface-light focus:bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none">
-              <option value="">All statuses</option>
-              <option value="in_progress">In Progress</option>
-              <option value="finished">Finished</option>
-            </select>
-          </div>
-
-          @if (loading()) { <app-loading-spinner /> }
-          @else if (error()) { <app-error-message [message]="error()" /> }
-          @else if (sessions().length === 0) { <app-empty-state [icon]="icons.emptyBox" title="No sessions yet" message="Start a workout session." /> }
-          @else {
-            <div class="overflow-x-auto -mx-5">
-              <table class="w-full text-sm">
-                <thead>
-                  <tr class="border-b border-border">
-                    <th class="text-left py-3 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">ID</th>
-                    <th class="text-left py-3 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">User</th>
-                    <th class="text-left py-3 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">Status</th>
-                    <th class="text-left py-3 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">Start Time</th>
-                    <th class="text-right py-3 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (s of sessions(); track s.id) {
-                    <tr class="border-b border-border/50 hover:bg-surface-light transition-colors">
-                      <td class="py-3 px-5 font-medium text-text font-mono">#{{ s.id }}</td>
-                      <td class="py-3 px-5 text-text">{{ userNames()[s.userId] ?? 'User #' + s.userId }}</td>
-                      <td class="py-3 px-5"><app-status-badge [status]="s.status" /></td>
-                      <td class="py-3 px-5 text-text-muted">{{ s.startTime | date:'MMM d, HH:mm' }}</td>
-                      <td class="py-3 px-5 text-right">
-                        <a [routerLink]="['/sessions', s.id]" class="btn-ghost text-sm px-3 py-1.5 rounded-lg" aria-label="View session #{{ s.id }}">
-                          <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.chevronRight | safeHtml"></span>
-                        </a>
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
-            </div>
-            <app-pagination [meta]="pagination()" (pageChange)="onPageChange($event)" />
-          }
+      <!-- Table card -->
+      <div class="card">
+        <!-- Filter -->
+        <div class="p-5" style="border-bottom: 1px solid var(--color-border);">
+          <select [(ngModel)]="statusFilter" (change)="onFilterChange()" class="input max-w-[180px]">
+            <option value="">All statuses</option>
+            <option value="in_progress">In Progress</option>
+            <option value="finished">Finished</option>
+          </select>
         </div>
-      </app-card>
+
+        @if (loading()) { <app-loading-spinner /> }
+        @else if (error()) { <app-error-message [message]="error()" /> }
+        @else if (sessions().length === 0) {
+          <app-empty-state [icon]="icons.emptyBox" title="No sessions yet" message="Start a workout session." />
+        } @else {
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr>
+                  <th class="table-header-cell">ID</th>
+                  <th class="table-header-cell hidden sm:table-cell">User</th>
+                  <th class="table-header-cell">Status</th>
+                  <th class="table-header-cell hidden md:table-cell">Start Time</th>
+                  <th class="table-header-cell text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (s of sessions(); track s.id) {
+                  <tr class="table-row">
+                    <td class="table-cell">
+                      <span class="font-mono font-medium" style="color: var(--color-muted);">#{{ s.id }}</span>
+                    </td>
+                    <td class="table-cell hidden sm:table-cell" style="color: var(--color-muted);">{{ userNames()[s.userId] ?? 'User #' + s.userId }}</td>
+                    <td class="table-cell">
+                      <app-status-badge [status]="s.status" />
+                    </td>
+                    <td class="table-cell hidden md:table-cell font-mono" style="color: var(--color-muted);">{{ s.startTime | date:'MMM d, HH:mm' }}</td>
+                    <td class="table-cell text-right">
+                      <a
+                        [routerLink]="['/sessions', s.id]"
+                        class="btn-ghost text-xs px-2.5 py-1.5"
+                        [attr.aria-label]="'View session #' + s.id"
+                      >
+                        <span class="w-3.5 h-3.5 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.chevronRight | safeHtml"></span>
+                        View
+                      </a>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          <div class="px-5 pb-5">
+            <app-pagination [meta]="pagination()" (pageChange)="onPageChange($event)" />
+          </div>
+        }
+      </div>
     </div>
   `,
 })
@@ -98,7 +115,13 @@ export class SessionListPage implements OnInit {
 
   ngOnInit() {
     this.userService.getAll({ limit: 100 }).pipe(catchError(() => of(null))).subscribe({
-      next: (res) => { if (res) { const names: Record<number, string> = {}; for (const u of res.data) names[u.id] = `${u.name} ${u.lastName}`; this.userNames.set(names); } },
+      next: (res) => {
+        if (res) {
+          const names: Record<number, string> = {};
+          for (const u of res.data) names[u.id] = `${u.name} ${u.lastName}`;
+          this.userNames.set(names);
+        }
+      },
     });
     this.load();
   }

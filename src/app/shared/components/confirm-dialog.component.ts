@@ -3,20 +3,32 @@ import { Component, signal } from '@angular/core';
 @Component({
   selector: 'app-confirm-dialog',
   standalone: true,
-  imports: [],
   template: `
     @if (visible()) {
-      <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-        <div class="bg-card rounded-xl border border-border shadow-xl w-full max-w-md mx-4 p-6">
-          <h3 class="text-base font-semibold text-text mb-2">{{ title() }}</h3>
-          <p class="text-sm text-text-muted mb-6">{{ message() }}</p>
+      <div
+        class="fixed inset-0 z-50 flex items-center justify-center p-4"
+        style="background-color: rgba(0,0,0,0.65);"
+        (click)="cancel()"
+        role="dialog"
+        [attr.aria-label]="title()"
+        aria-modal="true"
+      >
+        <div
+          class="card w-full max-w-md p-6 animate-slide-up"
+          (click)="$event.stopPropagation()"
+        >
+          <!-- Icon -->
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background-color: rgba(207,34,46,0.12);">
+            <svg viewBox="0 0 24 24" class="w-5 h-5" style="color: #FF7B7B;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <h3 class="text-base font-semibold font-display mb-1.5" style="color: var(--color-text);">{{ title() }}</h3>
+          <p class="text-sm mb-6" style="color: var(--color-muted);">{{ message() }}</p>
           <div class="flex items-center justify-end gap-3">
-            <button (click)="cancel()" class="btn-secondary">
-              Cancel
-            </button>
-            <button (click)="confirm()" class="btn-danger">
-              {{ confirmText() }}
-            </button>
+            <button (click)="cancel()" class="btn-secondary">Cancel</button>
+            <button (click)="confirm()" class="btn-danger">{{ confirmText() }}</button>
           </div>
         </div>
       </div>

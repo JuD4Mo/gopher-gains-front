@@ -6,28 +6,30 @@ import type { PaginationMeta } from '../../models/api-response.model';
   standalone: true,
   template: `
     @if (meta(); as m) {
-      <div class="flex items-center justify-between pt-4">
-        <span class="text-sm text-text-muted">
-          Page {{ m.page }} of {{ m.pageCount }} &middot; {{ m.totalCount }} total
+      <div class="flex items-center justify-between pt-5 mt-2" style="border-top: 1px solid var(--color-border);">
+        <span class="text-xs font-mono" style="color: var(--color-muted);">
+          {{ m.page }} / {{ m.pageCount }} pages &middot; {{ m.totalCount }} total
         </span>
         <div class="flex items-center gap-1">
           <button
             (click)="pageChange.emit(m.page - 1)"
             [disabled]="m.page <= 1"
-            class="btn-ghost px-3 py-1.5 text-sm rounded-lg disabled:opacity-40 disabled:cursor-not-allowed"
+            class="btn-ghost px-3 py-1.5 text-xs rounded-lg disabled:opacity-30"
+            aria-label="Previous page"
           >
             Prev
           </button>
           @for (p of pages(); track p) {
             @if (p === -1) {
-              <span class="px-2 text-text-muted text-sm">&hellip;</span>
+              <span class="px-2 text-xs" style="color: var(--color-muted);">&hellip;</span>
             } @else {
               <button
                 (click)="pageChange.emit(p)"
-                [class.bg-accent!]="p === m.page"
-                [class.text-white!]="p === m.page"
-                [class.text-text]="p !== m.page"
-                class="px-3 py-1.5 text-sm rounded-lg border border-border hover:bg-surface-light transition-colors min-w-9"
+                class="px-3 py-1.5 text-xs rounded-lg transition-all min-w-8 font-mono"
+                [style.background-color]="p === m.page ? 'var(--color-accent)' : 'transparent'"
+                [style.color]="p === m.page ? 'white' : 'var(--color-muted)'"
+                [style.border]="p === m.page ? 'none' : '1px solid var(--color-border)'"
+                [attr.aria-current]="p === m.page ? 'page' : null"
               >
                 {{ p }}
               </button>
@@ -36,7 +38,8 @@ import type { PaginationMeta } from '../../models/api-response.model';
           <button
             (click)="pageChange.emit(m.page + 1)"
             [disabled]="m.page >= m.pageCount"
-            class="btn-ghost px-3 py-1.5 text-sm rounded-lg disabled:opacity-40 disabled:cursor-not-allowed"
+            class="btn-ghost px-3 py-1.5 text-xs rounded-lg disabled:opacity-30"
+            aria-label="Next page"
           >
             Next
           </button>

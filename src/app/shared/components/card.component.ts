@@ -5,11 +5,10 @@ import { Component, input } from '@angular/core';
   standalone: true,
   template: `
     <div
-      class="bg-card rounded-xl border border-border shadow-card"
+      class="card"
       [class.border-t-2]="accentColor()"
-      [class.border-t-teal]="accentColor() === 'teal'"
       [class.border-t-accent]="accentColor() === 'accent'"
-      [class.border-t-success]="accentColor() === 'success'"
+      [style.border-top-color]="accentColor() === 'go' ? 'var(--color-accent)' : null"
     >
       <ng-content />
     </div>
