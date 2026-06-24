@@ -42,12 +42,12 @@ const LOGO_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gopher
           width="40"
           height="40"
         />
-        <!-- Wordmark -->
+        <!-- Wordmark: always white on the dark sidebar in both themes -->
         <div class="flex flex-col leading-none">
-          <span class="text-base font-bold tracking-tight font-display" style="color: var(--color-text);">
+          <span class="text-base font-bold tracking-tight font-display" style="color: #E6EDF3;">
             Gopher <span style="color: var(--color-accent);">Gains</span>
           </span>
-          <span class="text-[10px] font-mono mt-0.5" style="color: var(--color-sidebar-muted);">Fitness Tracker</span>
+          <span class="text-[10px] font-mono mt-0.5" style="color: #5A6A80;">Fitness Tracker</span>
         </div>
         <!-- Close button mobile -->
         <button
@@ -62,31 +62,50 @@ const LOGO_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gopher
         </button>
       </div>
 
-      <!-- Nav section label -->
-      <div class="px-5 pt-5 pb-2">
-        <span class="section-label">Navigation</span>
-      </div>
-
       <!-- Nav items -->
-      <nav class="flex-1 overflow-y-auto pb-4 px-3 space-y-0.5" role="navigation" aria-label="Main navigation">
-        @for (item of navItems(); track item.route) {
-          <a
-            [routerLink]="item.route"
-            (click)="sidebar.close()"
-            class="group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 relative"
-            [class.nav-active]="isActive(item.route)"
-            [class.nav-inactive]="!isActive(item.route)"
-            [attr.aria-current]="isActive(item.route) ? 'page' : null"
-          >
-            @if (isActive(item.route)) {
-              <span class="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r" style="background-color: var(--color-accent);"></span>
+      <nav class="flex-1 overflow-y-auto py-3 px-3" role="navigation" aria-label="Main navigation">
+        <!-- Main section -->
+        <div class="mb-1">
+          <p class="px-3 mb-1 text-[10px] font-semibold uppercase tracking-widest" style="color: #3A4A5A;">Workspace</p>
+          @for (item of mainItems(); track item.route) {
+            <a
+              [routerLink]="item.route"
+              (click)="sidebar.close()"
+              class="group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 relative"
+              [class.nav-active]="isActive(item.route)"
+              [class.nav-inactive]="!isActive(item.route)"
+              [attr.aria-current]="isActive(item.route) ? 'page' : null"
+            >
+              @if (isActive(item.route)) {
+                <span class="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r" style="background-color: var(--color-accent);"></span>
+              }
+              <span class="w-5 h-5 flex-shrink-0 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="item.icon | safeHtml"></span>
+              <span>{{ item.label }}</span>
+            </a>
+          }
+        </div>
+
+        <!-- Admin-only section -->
+        @if (adminItems().length > 0) {
+          <div class="mt-4">
+            <p class="px-3 mb-1 text-[10px] font-semibold uppercase tracking-widest" style="color: #3A4A5A;">Admin</p>
+            @for (item of adminItems(); track item.route) {
+              <a
+                [routerLink]="item.route"
+                (click)="sidebar.close()"
+                class="group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 relative"
+                [class.nav-active]="isActive(item.route)"
+                [class.nav-inactive]="!isActive(item.route)"
+                [attr.aria-current]="isActive(item.route) ? 'page' : null"
+              >
+                @if (isActive(item.route)) {
+                  <span class="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r" style="background-color: var(--color-accent);"></span>
+                }
+                <span class="w-5 h-5 flex-shrink-0 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="item.icon | safeHtml"></span>
+                <span>{{ item.label }}</span>
+              </a>
             }
-            <span
-              class="w-5 h-5 flex-shrink-0 [&>svg]:w-full [&>svg]:h-full transition-colors"
-              [innerHTML]="item.icon | safeHtml"
-            ></span>
-            <span>{{ item.label }}</span>
-          </a>
+          </div>
         }
       </nav>
 
@@ -125,18 +144,26 @@ export class SidebarComponent {
     { label: 'Dashboard', route: '/', icon: ICONS.dashboard },
     { label: 'Exercises', route: '/exercises', icon: ICONS.exercises },
     { label: 'Routines', route: '/routines', icon: ICONS.routines },
-    { label: 'Users', route: '/users', icon: ICONS.users, adminOnly: true },
     { label: 'Sessions', route: '/sessions', icon: ICONS.sessions },
+    { label: 'Users', route: '/users', icon: ICONS.users, adminOnly: true },
     { label: 'Assignments', route: '/assignments', icon: ICONS.assignments, adminOnly: true },
   ];
 
-  protected readonly navItems = computed(() => {
+  private readonly allMapped = computed(() => {
     const role = this.auth.currentRole();
     const dashboardRoute = role === 'admin' ? '/admin' : '/my';
-    return this.allNavItems
-      .filter(item => !item.adminOnly || role === 'admin')
-      .map(item => item.label === 'Dashboard' ? { ...item, route: dashboardRoute } : item);
+    return this.allNavItems.map(item =>
+      item.label === 'Dashboard' ? { ...item, route: dashboardRoute } : item
+    );
   });
+
+  protected readonly mainItems = computed(() =>
+    this.allMapped().filter(item => !item.adminOnly)
+  );
+
+  protected readonly adminItems = computed(() =>
+    this.allMapped().filter(item => item.adminOnly && this.auth.currentRole() === 'admin')
+  );
 
   protected readonly exactRoutes = new Set(['/admin', '/my']);
 
