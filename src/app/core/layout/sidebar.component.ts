@@ -1,5 +1,5 @@
 import { Component, inject, computed } from '@angular/core';
-import { RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { SafeHtmlPipe } from '../../shared/safe-html.pipe';
 import { ICONS } from '../../shared/icons';
 import { SidebarService } from './sidebar.service';
@@ -54,7 +54,7 @@ const GOPHER_SVG = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.or
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, SafeHtmlPipe],
+  imports: [RouterLink, SafeHtmlPipe],
   template: `
     @if (sidebar.open()) {
       <div
@@ -102,7 +102,6 @@ const GOPHER_SVG = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.or
         @for (item of navItems(); track item.route) {
           <a
             [routerLink]="item.route"
-            [routerLinkActiveOptions]="{ exact: isExactRoute(item.route) }"
             (click)="sidebar.close()"
             class="group flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 relative"
             [class.nav-active]="isActive(item.route)"
