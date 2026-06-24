@@ -1,7 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CardComponent } from '../../shared/components/card.component';
 import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner.component';
 import { EmptyStateComponent } from '../../shared/components/empty-state.component';
 import { PaginationComponent } from '../../shared/components/pagination.component';
@@ -15,7 +14,7 @@ import { ICONS } from '../../shared/icons';
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [RouterLink, FormsModule, CardComponent, LoadingSpinnerComponent, EmptyStateComponent, PaginationComponent, ErrorMessageComponent, SafeHtmlPipe],
+  imports: [RouterLink, FormsModule, LoadingSpinnerComponent, EmptyStateComponent, PaginationComponent, ErrorMessageComponent, SafeHtmlPipe],
   template: `
     <div class="space-y-6">
 
