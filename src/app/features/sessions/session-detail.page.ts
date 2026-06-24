@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit, computed } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
@@ -7,6 +7,7 @@ import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner
 import { ErrorMessageComponent } from '../../shared/components/error-message.component';
 import { EmptyStateComponent } from '../../shared/components/empty-state.component';
 import { StatusBadgeComponent } from '../../shared/components/status-badge.component';
+import { ExerciseSectionComponent } from '../../shared/components/exercise-section.component';
 import { SessionService } from '../../services/session.service';
 import { ExerciseSetService } from '../../services/exercise-set.service';
 import { ExerciseService } from '../../services/exercise.service';
@@ -21,7 +22,7 @@ import { ICONS } from '../../shared/icons';
 @Component({
   selector: 'app-session-detail',
   standalone: true,
-  imports: [RouterLink, FormsModule, DatePipe, CardComponent, LoadingSpinnerComponent, ErrorMessageComponent, EmptyStateComponent, StatusBadgeComponent, SafeHtmlPipe],
+  imports: [RouterLink, FormsModule, DatePipe, CardComponent, LoadingSpinnerComponent, ErrorMessageComponent, EmptyStateComponent, StatusBadgeComponent, ExerciseSectionComponent, SafeHtmlPipe],
   template: `
     <div class="space-y-6">
       <div class="flex items-center gap-3">
@@ -67,7 +68,7 @@ import { ICONS } from '../../shared/icons';
           <div class="lg:col-span-2">
             <app-card>
               <div class="p-5">
-                <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center justify-between mb-6">
                   <h3 class="text-base font-semibold text-text font-display">Exercise Sets ({{ sets().length }})</h3>
                   @if (session()!.status === 'in_progress' && !showAddForm()) {
                     <button (click)="showAddForm.set(true)" class="btn-primary text-xs px-3 py-1.5">
@@ -78,32 +79,44 @@ import { ICONS } from '../../shared/icons';
                 </div>
 
                 @if (showAddForm()) {
-                  <div class="p-4 mb-4 bg-surface-light rounded-lg border border-border space-y-3">
-                    <div class="grid grid-cols-2 gap-3">
+                  <div class="p-4 mb-6 bg-surface-light rounded-lg border border-border space-y-3">
+                    <div class="grid grid-cols-1 gap-3">
                       <div>
                         <label class="block text-xs font-medium text-text-muted mb-1">Exercise</label>
-                        <select [(ngModel)]="newSet.exerciseId" class="w-full px-3 py-2 text-sm border border-border rounded-lg bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none">
-                          <option value="0" disabled>Select exercise</option>
+                        <div class="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
                           @for (ex of exercises(); track ex.id) {
-                            <option [ngValue]="ex.id">{{ ex.name }}</option>
+                            <button 
+                              (click)="newSet.exerciseId = ex.id"
+                              [class.ring-2]="newSet.exerciseId === ex.id"
+                              [class.ring-accent]="newSet.exerciseId === ex.id"
+                              [class.bg-accent/10]="newSet.exerciseId === ex.id"
+                              class="text-left p-2.5 rounded-lg border border-border hover:border-accent/30 hover:bg-surface-light transition-all text-xs font-medium text-text"
+                            >
+                              <div class="font-semibold">{{ ex.name }}</div>
+                              @if (ex.muscleGroup) {
+                                <div class="text-xs text-text-muted mt-0.5">{{ ex.muscleGroup }}</div>
+                              }
+                            </button>
                           }
-                        </select>
+                        </div>
                       </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2">
                       <div>
                         <label class="block text-xs font-medium text-text-muted mb-1">Weight (kg)</label>
-                        <input type="number" [(ngModel)]="newSet.weight" step="0.5" class="w-full px-3 py-2 text-sm border border-border rounded-lg bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none" />
-                      </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                      <div>
-                        <label class="block text-xs font-medium text-text-muted mb-1">Repetitions</label>
-                        <input type="number" [(ngModel)]="newSet.repetitions" class="w-full px-3 py-2 text-sm border border-border rounded-lg bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none" />
+                        <input type="number" [(ngModel)]="newSet.weight" step="0.5" placeholder="0" class="w-full px-3 py-2 text-sm border border-border rounded-lg bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none" />
                       </div>
                       <div>
-                        <label class="block text-xs font-medium text-text-muted mb-1">RIR (0-10)</label>
-                        <input type="number" [(ngModel)]="newSet.rir" min="0" max="10" class="w-full px-3 py-2 text-sm border border-border rounded-lg bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none" />
+                        <label class="block text-xs font-medium text-text-muted mb-1">Reps</label>
+                        <input type="number" [(ngModel)]="newSet.repetitions" placeholder="0" class="w-full px-3 py-2 text-sm border border-border rounded-lg bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none" />
+                      </div>
+                      <div>
+                        <label class="block text-xs font-medium text-text-muted mb-1">RIR</label>
+                        <input type="number" [(ngModel)]="newSet.rir" min="0" max="10" placeholder="3" class="w-full px-3 py-2 text-sm border border-border rounded-lg bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none" />
                       </div>
                     </div>
+
                     <div class="flex items-center gap-2">
                       <button (click)="addSet()" class="btn-primary text-xs px-3 py-2">Add</button>
                       <button (click)="showAddForm.set(false)" class="btn-ghost text-xs px-3 py-2">Cancel</button>
@@ -115,27 +128,15 @@ import { ICONS } from '../../shared/icons';
                 @if (sets().length === 0) {
                   <app-empty-state [icon]="icons.emptyBox" title="No sets logged" message="Add exercise sets to this session." />
                 } @else {
-                  <div class="overflow-x-auto -mx-5">
-                    <table class="w-full text-sm">
-                      <thead>
-                        <tr class="border-b border-border">
-                          <th class="text-left py-2 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">Exercise</th>
-                          <th class="text-right py-2 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">Weight</th>
-                          <th class="text-right py-2 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">Reps</th>
-                          <th class="text-right py-2 px-5 font-semibold text-text-muted text-xs uppercase tracking-wider">RIR</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @for (s of sets(); track s.id) {
-                          <tr class="border-b border-border/50">
-                            <td class="py-2 px-5 text-text">{{ exerciseNames()[s.exerciseId] ?? 'Exercise #' + s.exerciseId }}</td>
-                            <td class="py-2 px-5 text-right font-mono text-text">{{ s.weight }} kg</td>
-                            <td class="py-2 px-5 text-right font-mono text-text">{{ s.repetitions }}</td>
-                            <td class="py-2 px-5 text-right font-mono text-text-muted">{{ s.rir }}</td>
-                          </tr>
-                        }
-                      </tbody>
-                    </table>
+                  <div class="space-y-4">
+                    @for (exercise of exercisesWithSets(); track exercise.id) {
+                      <app-exercise-section 
+                        [exercise]="exercise" 
+                        [sets]="exercise.sets"
+                        [showBadge]="true"
+                        [showDelete]="false"
+                      />
+                    }
                   </div>
                 }
               </div>
@@ -163,6 +164,17 @@ export class SessionDetailPage implements OnInit {
   protected readonly showAddForm = signal(false);
   protected newSet = { exerciseId: 0, weight: 0, repetitions: 0, rir: 3 };
   private sessionId = 0;
+
+  protected readonly exercisesWithSets = computed(() => {
+    const exercises = this.exercises();
+    const sets = this.sets();
+    return exercises
+      .map((ex) => ({
+        ...ex,
+        sets: sets.filter((s) => s.exerciseId === ex.id),
+      }))
+      .filter((ex) => ex.sets.length > 0);
+  });
 
   ngOnInit() {
     this.sessionId = Number(this.route.snapshot.paramMap.get('id'));

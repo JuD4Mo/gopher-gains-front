@@ -177,15 +177,15 @@ import type { Routine } from '../../models/routine.model';
               @if (assignedRoutines().length === 0) {
                 <app-empty-state [icon]="icons.routines" title="No routines assigned" message="Ask your admin to assign routines to get started." />
               } @else {
-                <div class="space-y-2">
+                <div class="space-y-3">
                   @for (a of assignedRoutines(); track a.routineId) {
-                    <a [routerLink]="'/routines/' + a.routineId" class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-light transition-colors group">
-                      <div>
+                    <div class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-light transition-colors group border border-border/30 hover:border-accent/20">
+                      <a [routerLink]="'/routines/' + a.routineId" class="flex-1">
                         <p class="text-sm font-medium text-text">{{ routineNames()[a.routineId] ?? 'Routine #' + a.routineId }}</p>
                         <p class="text-xs text-text-muted mt-0.5">Assigned {{ a.assignedAt | date:'MMM d, yyyy' }}</p>
-                      </div>
+                      </a>
                       <span class="w-4 h-4 text-text-muted group-hover:text-accent transition-colors [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.chevronRight | safeHtml"></span>
-                    </a>
+                    </div>
                   }
                 </div>
               }
@@ -197,12 +197,12 @@ import type { Routine } from '../../models/routine.model';
           <div class="p-5">
             <h2 class="text-base font-semibold text-text font-display mb-4">Quick Actions</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <a routerLink="/sessions/new" class="flex flex-col items-start gap-2 p-4 rounded-lg border border-border/50 hover:border-accent/20 hover:bg-surface-light transition-all duration-150 group">
-                <span class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center text-accent">
+              <a routerLink="/sessions/new" class="flex flex-col items-start gap-2 p-4 rounded-lg border-2 border-accent/20 hover:border-accent/50 hover:bg-surface-light transition-all duration-150 group bg-accent/5">
+                <span class="w-8 h-8 rounded-lg bg-accent/20 flex items-center justify-center text-accent">
                   <div class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.plus | safeHtml"></div>
                 </span>
-                <span class="text-sm font-medium text-text group-hover:text-accent transition-colors">Start a Session</span>
-                <span class="text-xs text-text-muted">Begin tracking your workout</span>
+                <span class="text-sm font-medium text-text group-hover:text-accent transition-colors">Start Session</span>
+                <span class="text-xs text-text-muted">Choose routine & log exercises</span>
               </a>
               <a routerLink="/exercises" class="flex flex-col items-start gap-2 p-4 rounded-lg border border-border/50 hover:border-teal/20 hover:bg-surface-light transition-all duration-150 group">
                 <span class="w-8 h-8 rounded-lg bg-teal/10 flex items-center justify-center text-teal">

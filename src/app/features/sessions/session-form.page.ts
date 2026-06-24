@@ -3,10 +3,12 @@ import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CardComponent } from '../../shared/components/card.component';
 import { ErrorMessageComponent } from '../../shared/components/error-message.component';
+import { RoutineSelectionModalComponent } from './routine-selection-modal.component';
 import { SessionService } from '../../services/session.service';
 import { ToastService } from '../../shared/services/toast.service';
 import { UserService } from '../../services/user.service';
 import type { User } from '../../models/user.model';
+import type { Routine } from '../../models/routine.model';
 import { catchError, of } from 'rxjs';
 import { SafeHtmlPipe } from '../../shared/safe-html.pipe';
 import { ICONS } from '../../shared/icons';
@@ -14,8 +16,12 @@ import { ICONS } from '../../shared/icons';
 @Component({
   selector: 'app-session-form',
   standalone: true,
-  imports: [RouterLink, FormsModule, CardComponent, ErrorMessageComponent, SafeHtmlPipe],
+  imports: [RouterLink, FormsModule, CardComponent, ErrorMessageComponent, RoutineSelectionModalComponent, SafeHtmlPipe],
   template: `
+    @if (showRoutineModal()) {
+      <app-routine-selection-modal (routineSelected)="onRoutineSelected($event)" />
+    }
+
     <div class="max-w-2xl mx-auto space-y-6">
       <div class="flex items-center gap-3">
         <a routerLink="/sessions" class="btn-ghost px-0 text-sm gap-1.5">
@@ -28,6 +34,12 @@ import { ICONS } from '../../shared/icons';
       <app-card>
         <form (ngSubmit)="onSubmit()" class="p-6 space-y-5">
           <app-error-message [message]="error()" />
+          
+          @if (selectedRoutine()) {
+            <div class="p-4 rounded-lg bg-teal/5 border border-teal/20">
+              <p class="text-sm font-medium text-teal"><strong>Routine selected:</strong> {{ selectedRoutine()!.name }}</p>
+            </div>
+          }
 
           <div>
             <label class="block text-sm font-medium text-text mb-1.5">User</label>
@@ -62,6 +74,8 @@ export class SessionFormPage implements OnInit {
   protected readonly users = signal<User[]>([]);
   protected readonly submitting = signal(false);
   protected readonly error = signal<string | null>(null);
+  protected readonly showRoutineModal = signal(true);
+  protected readonly selectedRoutine = signal<Routine | null>(null);
   protected userId = 0;
   protected observations = '';
 
@@ -69,6 +83,15 @@ export class SessionFormPage implements OnInit {
     this.userService.getAll({ limit: 100 }).pipe(catchError(() => of(null))).subscribe({
       next: (res) => { if (res) this.users.set(res.data); },
     });
+  }
+
+  protected onRoutineSelected(routine: Routine | null) {
+    if (!routine) {
+      this.showRoutineModal.set(false);
+      return;
+    }
+    this.selectedRoutine.set(routine);
+    this.showRoutineModal.set(false);
   }
 
   protected onSubmit() {
