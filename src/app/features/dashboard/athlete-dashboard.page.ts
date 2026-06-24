@@ -11,7 +11,9 @@ import { catchError, of, forkJoin } from 'rxjs';
 import type { WorkoutSession } from '../../models/session.model';
 import type { UserRoutine } from '../../models/user-routine.model';
 
-const MASCOT_URL = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gopher-Gains-Logo-v1-Photoroom-WfSlqGUxq90Xa0oAPjDPNoaGcCYtXQ.png';
+const MASCOT_CELEBRATING = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gopher-celebrating-BZF4N0dTYgz8RsFhJeLbyonFVV35Lx.png';
+const MASCOT_THINKING    = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gopher-thinking-Photoroom-0gguwoJ79ANQ0MBK9mrnlwsQY4QLkK.png';
+const MASCOT_CLIPBOARD   = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/gopher-clipboard-Photoroom-IsR5uV4PXCOFc4rG4gWb2fp9Og5EGF.png';
 
 const WEEK_DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
@@ -34,8 +36,8 @@ const WEEK_DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
           <!-- Mascot -->
           <div class="flex-shrink-0 relative">
             <img
-              [src]="mascotUrl"
-              alt="Gopher Gains mascot"
+              [src]="mascotCelebrating"
+              alt="Gopher celebrating"
               class="w-24 h-24 object-contain drop-shadow-xl"
               width="96"
               height="96"
@@ -117,12 +119,13 @@ const WEEK_DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
             </div>
 
             @if (assignedRoutines().length === 0) {
-              <div class="flex flex-col items-center justify-center py-16 gap-4">
-                <img [src]="mascotUrl" alt="Gopher Gains mascot" class="w-20 h-20 object-contain opacity-60" width="80" height="80" />
+              <div class="flex flex-col items-center justify-center py-10 gap-3">
+                <img [src]="mascotThinking" alt="Gopher thinking" class="w-28 h-28 object-contain" width="112" height="112" />
                 <div class="text-center">
                   <p class="text-sm font-semibold font-display" style="color: var(--color-text);">No routines yet</p>
-                  <p class="text-xs mt-1 max-w-xs" style="color: var(--color-muted);">Your coach will assign routines to get you started on your training program.</p>
+                  <p class="text-xs mt-1 max-w-xs leading-relaxed" style="color: var(--color-muted);">Create your first routine and start building your training program.</p>
                 </div>
+                <a routerLink="/routines/new" class="btn-primary text-xs px-4 py-2">Create a Routine</a>
               </div>
             } @else {
               <div class="divide-y" style="border-color: var(--color-border);">
@@ -174,15 +177,13 @@ const WEEK_DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
             </div>
 
             @if (recentSessions().length === 0) {
-              <div class="flex flex-col items-center justify-center py-12 gap-3">
-                <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background-color: var(--color-accent-dim);">
-                  <div class="w-6 h-6 [&>svg]:w-full [&>svg]:h-full" style="color: var(--color-accent);" [innerHTML]="icons.sessions | safeHtml"></div>
-                </div>
+              <div class="flex flex-col items-center justify-center py-10 gap-3">
+                <img [src]="mascotClipboard" alt="Gopher with clipboard" class="w-28 h-28 object-contain" width="112" height="112" />
                 <div class="text-center">
-                  <p class="text-sm font-semibold font-display" style="color: var(--color-text);">No sessions logged</p>
-                  <p class="text-xs mt-1" style="color: var(--color-muted);">Start your first session to track your progress.</p>
+                  <p class="text-sm font-semibold font-display" style="color: var(--color-text);">No sessions logged yet</p>
+                  <p class="text-xs mt-1 max-w-xs leading-relaxed" style="color: var(--color-muted);">Your training history will appear here once you complete your first session.</p>
                 </div>
-                <a routerLink="/sessions/new" class="btn-primary text-xs px-4 py-2 mt-1">Start First Session</a>
+                <a routerLink="/sessions/new" class="btn-primary text-xs px-4 py-2">Log First Session</a>
               </div>
             } @else {
               <div class="divide-y" style="border-color: var(--color-border);">
@@ -283,7 +284,9 @@ export class AthleteDashboardPage implements OnInit {
   private readonly userRoutineService = inject(UserRoutineService);
 
   protected readonly icons = ICONS;
-  protected readonly mascotUrl = MASCOT_URL;
+  protected readonly mascotCelebrating = MASCOT_CELEBRATING;
+  protected readonly mascotThinking    = MASCOT_THINKING;
+  protected readonly mascotClipboard   = MASCOT_CLIPBOARD;
   protected readonly weekDays = WEEK_DAYS;
   protected readonly todayIndex = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1;
 
