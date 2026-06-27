@@ -20,22 +20,13 @@ import { ICONS } from '../../shared/icons';
           Back
         </a>
         <span style="color: var(--color-border);">/</span>
-        <h2 class="text-lg font-bold font-display" style="color: var(--color-text);">
-          {{ isEdit() ? 'Edit Routine' : 'New Routine' }}
-        </h2>
+        <h2 class="text-lg font-bold font-display" style="color: var(--color-text);">{{ isEdit() ? 'Edit Routine' : 'New Routine' }}</h2>
       </div>
 
       <div class="card">
         <div class="px-6 pt-5 pb-4" style="border-bottom: 1px solid var(--color-border);">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color: rgba(183,148,244,0.12); color: #B794F4;">
-              <div class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.routines | safeHtml"></div>
-            </div>
-            <div>
-              <p class="text-sm font-semibold font-display" style="color: var(--color-text);">Routine Details</p>
-              <p class="text-xs font-mono" style="color: var(--color-muted);">Define the routine structure</p>
-            </div>
-          </div>
+          <p class="text-sm font-semibold font-display" style="color: var(--color-text);">Routine Details</p>
+          <p class="text-xs font-mono" style="color: var(--color-muted);">Define the routine structure</p>
         </div>
 
         <form (ngSubmit)="onSubmit()" class="p-6 space-y-5">
@@ -67,9 +58,7 @@ import { ICONS } from '../../shared/icons';
 
           <div class="flex items-center gap-3 pt-2" style="border-top: 1px solid var(--color-border);">
             <button type="submit" [disabled]="submitting()" class="btn-primary">
-              @if (submitting()) {
-                <span class="w-4 h-4 rounded-full animate-spin border-2 border-white/30 border-t-white"></span>
-              }
+              @if (submitting()) { <span class="w-4 h-4 rounded-full animate-spin border-2 border-white/30 border-t-white"></span> }
               {{ submitting() ? 'Saving...' : isEdit() ? 'Update Routine' : 'Create Routine' }}
             </button>
             <a routerLink="/routines" class="btn-secondary">Cancel</a>
@@ -94,8 +83,7 @@ export class RoutineFormPage implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.editId = Number(id); this.isEdit.set(true);
+    if (id) { this.editId = Number(id); this.isEdit.set(true);
       this.routineService.getById(this.editId).subscribe({
         next: (res) => { this.form = { name: res.data.name, description: res.data.description, frequency: res.data.frequency, type: res.data.type }; },
         error: (err) => this.error.set(err.error?.message ?? err.message),

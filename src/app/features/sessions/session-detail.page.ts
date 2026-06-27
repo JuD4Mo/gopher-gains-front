@@ -5,9 +5,9 @@ import { DatePipe } from '@angular/common';
 import { CardComponent } from '../../shared/components/card.component';
 import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner.component';
 import { ErrorMessageComponent } from '../../shared/components/error-message.component';
-import { EmptyStateComponent } from '../../shared/components/empty-state.component';
 import { StatusBadgeComponent } from '../../shared/components/status-badge.component';
 import { ExerciseSectionComponent } from '../../shared/components/exercise-section.component';
+import { MascotComponent } from '../../shared/components/mascot.component';
 import { SessionService } from '../../services/session.service';
 import { ExerciseSetService } from '../../services/exercise-set.service';
 import { ExerciseService } from '../../services/exercise.service';
@@ -22,7 +22,7 @@ import { ICONS } from '../../shared/icons';
 @Component({
   selector: 'app-session-detail',
   standalone: true,
-  imports: [RouterLink, FormsModule, DatePipe, CardComponent, LoadingSpinnerComponent, ErrorMessageComponent, EmptyStateComponent, StatusBadgeComponent, ExerciseSectionComponent, SafeHtmlPipe],
+  imports: [RouterLink, FormsModule, DatePipe, CardComponent, LoadingSpinnerComponent, ErrorMessageComponent, StatusBadgeComponent, ExerciseSectionComponent, MascotComponent, SafeHtmlPipe],
   template: `
     <div class="p-5 lg:p-8 space-y-6 max-w-[1400px] mx-auto">
       <div class="flex items-center gap-3">
@@ -30,7 +30,7 @@ import { ICONS } from '../../shared/icons';
           <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.arrowLeft | safeHtml"></span>
           Back
         </a>
-        <h2 class="text-xl font-bold font-display text-text">Session #{{ session()?.id }}</h2>
+        <h2 class="text-xl font-bold font-display" style="color: var(--color-text);">Session #{{ session()?.id }}</h2>
       </div>
 
       @if (loading()) { <app-loading-spinner size="lg" /> }
@@ -40,23 +40,23 @@ import { ICONS } from '../../shared/icons';
           <app-card>
             <div class="p-5 space-y-4">
               <div class="flex items-center justify-between">
-                <h3 class="text-base font-semibold text-text font-display">Details</h3>
+                <h3 class="text-base font-semibold font-display" style="color: var(--color-text);">Details</h3>
                 <app-status-badge [status]="session()!.status" />
               </div>
               <div>
-                <span class="text-xs font-semibold uppercase tracking-wider text-text-muted">Start Time</span>
-                <p class="text-sm text-text mt-1">{{ session()!.startTime | date:'medium' }}</p>
+                <span class="text-xs font-semibold uppercase tracking-wider" style="color: var(--color-muted);">Start Time</span>
+                <p class="text-sm mt-1" style="color: var(--color-text);">{{ session()!.startTime | date:'medium' }}</p>
               </div>
               @if (session()!.endTime) {
                 <div>
-                  <span class="text-xs font-semibold uppercase tracking-wider text-text-muted">End Time</span>
-                  <p class="text-sm text-text mt-1">{{ session()!.endTime | date:'medium' }}</p>
+                  <span class="text-xs font-semibold uppercase tracking-wider" style="color: var(--color-muted);">End Time</span>
+                  <p class="text-sm mt-1" style="color: var(--color-text);">{{ session()!.endTime | date:'medium' }}</p>
                 </div>
               }
               @if (session()!.observations) {
                 <div>
-                  <span class="text-xs font-semibold uppercase tracking-wider text-text-muted">Observations</span>
-                  <p class="text-sm text-text mt-1">{{ session()!.observations }}</p>
+                  <span class="text-xs font-semibold uppercase tracking-wider" style="color: var(--color-muted);">Observations</span>
+                  <p class="text-sm mt-1" style="color: var(--color-text);">{{ session()!.observations }}</p>
                 </div>
               }
               @if (session()!.status === 'in_progress') {
@@ -69,7 +69,7 @@ import { ICONS } from '../../shared/icons';
             <app-card>
               <div class="p-5">
                 <div class="flex items-center justify-between mb-6">
-                  <h3 class="text-base font-semibold text-text font-display">Exercise Sets ({{ sets().length }})</h3>
+                  <h3 class="text-base font-semibold font-display" style="color: var(--color-text);">Exercise Sets ({{ sets().length }})</h3>
                   @if (session()!.status === 'in_progress' && !showAddForm()) {
                     <button (click)="showAddForm.set(true)" class="btn-primary text-xs px-3 py-1.5">
                       <span class="w-3.5 h-3.5 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.plus | safeHtml"></span>
@@ -79,41 +79,33 @@ import { ICONS } from '../../shared/icons';
                 </div>
 
                 @if (showAddForm()) {
-                  <div class="p-4 mb-6 bg-surface-light rounded-lg border border-border space-y-3">
-                    <div class="grid grid-cols-1 gap-3">
-                      <div>
-                        <label class="block text-xs font-medium text-text-muted mb-1">Exercise</label>
-                        <div class="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
-                          @for (ex of exercises(); track ex.id) {
-                            <button 
-                              (click)="newSet.exerciseId = ex.id"
-                              [class.ring-2]="newSet.exerciseId === ex.id"
-                              [class.ring-accent]="newSet.exerciseId === ex.id"
-                              [class.bg-accent/10]="newSet.exerciseId === ex.id"
-                              class="text-left p-2.5 rounded-lg border border-border hover:border-accent/30 hover:bg-surface-light transition-all text-xs font-medium text-text"
-                            >
-                              <div class="font-semibold">{{ ex.name }}</div>
-                              @if (ex.muscleGroup) {
-                                <div class="text-xs text-text-muted mt-0.5">{{ ex.muscleGroup }}</div>
-                              }
-                            </button>
-                          }
-                        </div>
+                  <div class="p-4 mb-6 rounded-lg border border-border space-y-3" style="background-color: var(--color-surface);">
+                    <div>
+                      <label class="block text-xs font-medium" style="color: var(--color-muted);">Exercise</label>
+                      <div class="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto mt-2">
+                        @for (ex of exercises(); track ex.id) {
+                          <button (click)="newSet.exerciseId = ex.id"
+                            [class.ring-2]="newSet.exerciseId === ex.id" [class.ring-accent]="newSet.exerciseId === ex.id" [class.bg-accent/10]="newSet.exerciseId === ex.id"
+                            class="text-left p-2.5 rounded-lg border border-border hover:border-accent/30 transition-all text-xs font-medium" style="color: var(--color-text);">
+                            <div class="font-semibold">{{ ex.name }}</div>
+                            @if (ex.muscleGroup) { <div class="text-xs mt-0.5" style="color: var(--color-muted);">{{ ex.muscleGroup }}</div> }
+                          </button>
+                        }
                       </div>
                     </div>
 
                     <div class="grid grid-cols-3 gap-2">
                       <div>
-                        <label class="block text-xs font-medium text-text-muted mb-1">Weight (kg)</label>
-                        <input type="number" [(ngModel)]="newSet.weight" step="0.5" placeholder="0" class="w-full px-3 py-2 text-sm border border-border rounded-lg bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none" />
+                        <label class="block text-xs font-medium mb-1" style="color: var(--color-muted);">Weight (kg)</label>
+                        <input type="number" [(ngModel)]="newSet.weight" step="0.5" placeholder="0" class="w-full px-3 py-2 text-sm border border-border rounded-lg transition-all outline-none" style="background-color: var(--color-card); color: var(--color-text);" />
                       </div>
                       <div>
-                        <label class="block text-xs font-medium text-text-muted mb-1">Reps</label>
-                        <input type="number" [(ngModel)]="newSet.repetitions" placeholder="0" class="w-full px-3 py-2 text-sm border border-border rounded-lg bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none" />
+                        <label class="block text-xs font-medium mb-1" style="color: var(--color-muted);">Reps</label>
+                        <input type="number" [(ngModel)]="newSet.repetitions" placeholder="0" class="w-full px-3 py-2 text-sm border border-border rounded-lg transition-all outline-none" style="background-color: var(--color-card); color: var(--color-text);" />
                       </div>
                       <div>
-                        <label class="block text-xs font-medium text-text-muted mb-1">RIR</label>
-                        <input type="number" [(ngModel)]="newSet.rir" min="0" max="10" placeholder="3" class="w-full px-3 py-2 text-sm border border-border rounded-lg bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none" />
+                        <label class="block text-xs font-medium mb-1" style="color: var(--color-muted);">RIR</label>
+                        <input type="number" [(ngModel)]="newSet.rir" min="0" max="10" placeholder="3" class="w-full px-3 py-2 text-sm border border-border rounded-lg transition-all outline-none" style="background-color: var(--color-card); color: var(--color-text);" />
                       </div>
                     </div>
 
@@ -126,16 +118,15 @@ import { ICONS } from '../../shared/icons';
                 }
 
                 @if (sets().length === 0) {
-                  <app-empty-state [icon]="icons.emptyBox" title="No sets logged" message="Add exercise sets to this session." />
+                  <div class="flex flex-col items-center py-12 gap-3">
+                    <app-mascot variant="thinking" size="lg" alt="No sets" />
+                    <p class="text-sm font-semibold font-display" style="color: var(--color-text);">No sets logged</p>
+                    <p class="text-xs" style="color: var(--color-muted);">Add exercise sets to this session.</p>
+                  </div>
                 } @else {
                   <div class="space-y-4">
                     @for (exercise of exercisesWithSets(); track exercise.id) {
-                      <app-exercise-section 
-                        [exercise]="exercise" 
-                        [sets]="exercise.sets"
-                        [showBadge]="true"
-                        [showDelete]="false"
-                      />
+                      <app-exercise-section [exercise]="exercise" [sets]="exercise.sets" [showBadge]="true" [showDelete]="false" />
                     }
                   </div>
                 }
@@ -166,45 +157,27 @@ export class SessionDetailPage implements OnInit {
   private sessionId = 0;
 
   protected readonly exercisesWithSets = computed(() => {
-    const exercises = this.exercises();
-    const sets = this.sets();
-    return exercises
-      .map((ex) => ({
-        ...ex,
-        sets: sets.filter((s) => s.exerciseId === ex.id),
-      }))
-      .filter((ex) => ex.sets.length > 0);
+    const exs = this.exercises();
+    const sts = this.sets();
+    return exs.map((ex) => ({ ...ex, sets: sts.filter((s) => s.exerciseId === ex.id) })).filter((ex) => ex.sets.length > 0);
   });
 
   ngOnInit() {
     this.sessionId = Number(this.route.snapshot.paramMap.get('id'));
     if (!this.sessionId) return;
     this.exerciseService.getAll({}).pipe(catchError(() => of(null))).subscribe({
-      next: (res) => {
-        if (res) {
-          this.exercises.set(res.data);
-          const names: Record<number, string> = {};
-          for (const ex of res.data) names[ex.id] = ex.name;
-          this.exerciseNames.set(names);
-        }
-      },
+      next: (res) => { if (res) { this.exercises.set(res.data); const n: Record<number, string> = {}; for (const ex of res.data) n[ex.id] = ex.name; this.exerciseNames.set(n); } },
     });
     this.load();
   }
 
   private load() {
     this.loading.set(true);
-    this.sessionService.getById(this.sessionId).subscribe({
-      next: (res) => { this.session.set(res.data); this.loadSets(); },
-      error: () => this.loading.set(false),
-    });
+    this.sessionService.getById(this.sessionId).subscribe({ next: (res) => { this.session.set(res.data); this.loadSets(); }, error: () => this.loading.set(false) });
   }
 
   private loadSets() {
-    this.exerciseSetService.getAll({ wsessionId: this.sessionId }).subscribe({
-      next: (res) => { this.sets.set(res.data); this.loading.set(false); },
-      error: () => this.loading.set(false),
-    });
+    this.exerciseSetService.getAll({ wsessionId: this.sessionId }).subscribe({ next: (res) => { this.sets.set(res.data); this.loading.set(false); }, error: () => this.loading.set(false) });
   }
 
   protected addSet() {

@@ -17,17 +17,10 @@ import { ICONS } from '../../shared/icons';
   imports: [RouterLink, FormsModule, LoadingSpinnerComponent, EmptyStateComponent, PaginationComponent, ErrorMessageComponent, SafeHtmlPipe],
   template: `
     <div class="p-5 lg:p-8 space-y-6 max-w-[1400px] mx-auto">
-
-      <!-- Page header -->
       <div class="flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background-color: rgba(86,211,100,0.12); color: #56D364;">
-            <div class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.users | safeHtml"></div>
-          </div>
-          <div>
-            <h2 class="text-lg font-bold font-display leading-none" style="color: var(--color-text);">Users</h2>
-            <p class="text-xs font-mono mt-0.5" style="color: var(--color-muted);">Registered members</p>
-          </div>
+        <div>
+          <h2 class="text-xl font-bold font-display" style="color: var(--color-text);">Users</h2>
+          <p class="text-sm font-mono mt-1" style="color: var(--color-muted);">Registered members</p>
         </div>
         <a routerLink="/users/new" class="btn-primary">
           <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.plus | safeHtml"></span>
@@ -35,16 +28,10 @@ import { ICONS } from '../../shared/icons';
         </a>
       </div>
 
-      <!-- Table card -->
       <div class="card">
-        <!-- Filter -->
         <div class="p-5" style="border-bottom: 1px solid var(--color-border);">
           <div class="relative max-w-xs">
-            <div
-              class="absolute inset-y-0 left-3 flex items-center pointer-events-none [&>svg]:w-4 [&>svg]:h-4"
-              style="color: var(--color-muted);"
-              [innerHTML]="icons.search | safeHtml"
-            ></div>
+            <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none [&>svg]:w-4 [&>svg]:h-4" style="color: var(--color-muted);" [innerHTML]="icons.search | safeHtml"></div>
             <input [(ngModel)]="nameFilter" (input)="onFilterChange()" placeholder="Search users..." class="input pl-9" />
           </div>
         </div>
@@ -67,20 +54,13 @@ import { ICONS } from '../../shared/icons';
                   <tr class="table-row">
                     <td class="table-cell">
                       <div class="flex items-center gap-3">
-                        <div
-                          class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold font-mono flex-shrink-0"
-                          style="background-color: var(--color-accent-dim); color: var(--color-accent);"
-                        >{{ u.name.charAt(0).toUpperCase() }}{{ u.lastName.charAt(0).toUpperCase() }}</div>
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold font-mono flex-shrink-0" style="background-color: var(--color-accent-dim); color: var(--color-accent);">{{ u.name.charAt(0).toUpperCase() }}{{ u.lastName.charAt(0).toUpperCase() }}</div>
                         <span class="font-medium">{{ u.name }} {{ u.lastName }}</span>
                       </div>
                     </td>
                     <td class="table-cell hidden sm:table-cell font-mono" style="color: var(--color-muted);">{{ u.email }}</td>
                     <td class="table-cell text-right">
-                      <a
-                        [routerLink]="['/users', u.id]"
-                        class="btn-ghost text-xs px-2.5 py-1.5"
-                        [attr.aria-label]="'Edit ' + u.name + ' ' + u.lastName"
-                      >
+                      <a [routerLink]="['/users', u.id]" class="btn-ghost text-xs px-2.5 py-1.5" [attr.aria-label]="'Edit ' + u.name + ' ' + u.lastName">
                         <span class="w-3.5 h-3.5 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.edit | safeHtml"></span>
                         Edit
                       </a>

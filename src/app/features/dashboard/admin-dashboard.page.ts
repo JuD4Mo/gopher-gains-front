@@ -48,17 +48,11 @@ interface ActivityItem {
       <!-- Stats row -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
         @for (stat of stats(); track stat.label) {
-          <a
-            [routerLink]="stat.link"
-            class="group block rounded-xl p-5 transition-all duration-200 hover:-translate-y-px"
-            style="background-color: var(--color-card); border: 1px solid var(--color-border);"
-          >
+          <a [routerLink]="stat.link" class="group block rounded-xl p-5 transition-all duration-200 hover:-translate-y-px"
+            style="background-color: var(--color-card); border: 1px solid var(--color-border);">
             <div class="flex items-center justify-between mb-4">
-              <div
-                class="w-8 h-8 rounded-lg flex items-center justify-center transition-transform group-hover:scale-105"
-                [style.background-color]="stat.accent + '18'"
-                [style.color]="stat.accent"
-              >
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-transform group-hover:scale-105"
+                [style.background-color]="stat.accent + '18'" [style.color]="stat.accent">
                 <div class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="stat.icon | safeHtml"></div>
               </div>
             </div>
@@ -68,14 +62,9 @@ interface ActivityItem {
         }
       </div>
 
-      <!-- Asymmetric grid: feed + actions panel -->
+      <!-- Activity + Quick Actions -->
       <div class="flex flex-col xl:flex-row gap-5">
-
-        <!-- Activity Feed -->
-        <div
-          class="flex-1 min-w-0 rounded-xl flex flex-col"
-          style="background-color: var(--color-card); border: 1px solid var(--color-border);"
-        >
+        <div class="flex-1 min-w-0 rounded-xl flex flex-col" style="background-color: var(--color-card); border: 1px solid var(--color-border);">
           <div class="flex items-center justify-between px-6 py-4" style="border-bottom: 1px solid var(--color-border);">
             <div class="flex items-center gap-2.5">
               <span class="w-2 h-2 rounded-full" style="background-color: var(--color-accent);"></span>
@@ -98,11 +87,8 @@ interface ActivityItem {
             <div class="divide-y flex-1" style="border-color: var(--color-border);">
               @for (item of activityFeed(); track item.label + item.time) {
                 <div class="flex items-start gap-4 px-6 py-4 transition-colors hover:bg-[var(--color-card-hover)]">
-                  <div
-                    class="w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center mt-0.5"
-                    [style.background-color]="item.accent + '15'"
-                    [style.color]="item.accent"
-                  >
+                  <div class="w-8 h-8 rounded-lg flex-shrink-0 flex items-center justify-center mt-0.5"
+                    [style.background-color]="item.accent + '15'" [style.color]="item.accent">
                     <div class="w-3.5 h-3.5 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="getActivityIcon(item.type) | safeHtml"></div>
                   </div>
                   <div class="flex-1 min-w-0">
@@ -119,25 +105,16 @@ interface ActivityItem {
           }
         </div>
 
-        <!-- Right panel: quick actions + content summary -->
         <div class="xl:w-68 flex flex-col gap-5" style="min-width: 17rem;">
-
-          <!-- Quick actions -->
           <div class="rounded-xl" style="background-color: var(--color-card); border: 1px solid var(--color-border);">
             <div class="px-5 py-4" style="border-bottom: 1px solid var(--color-border);">
               <p class="text-sm font-semibold font-display" style="color: var(--color-text);">Quick Actions</p>
             </div>
             <div class="p-3 space-y-1">
               @for (action of quickActions; track action.label) {
-                <a
-                  [routerLink]="action.route"
-                  class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group"
-                >
-                  <div
-                    class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105"
-                    [style.background-color]="action.accent + '18'"
-                    [style.color]="action.accent"
-                  >
+                <a [routerLink]="action.route" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group">
+                  <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105"
+                    [style.background-color]="action.accent + '18'" [style.color]="action.accent">
                     <div class="w-3.5 h-3.5 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="action.icon | safeHtml"></div>
                   </div>
                   <div class="flex-1 min-w-0">
@@ -149,9 +126,6 @@ interface ActivityItem {
               }
             </div>
           </div>
-
-
-
         </div>
       </div>
     </div>
@@ -177,13 +151,7 @@ export class AdminDashboardPage implements OnInit {
   ];
 
   protected getActivityIcon(type: ActivityItem['type']): string {
-    const map: Record<string, string> = {
-      session:    ICONS.sessions,
-      user:       ICONS.users,
-      exercise:   ICONS.exercises,
-      routine:    ICONS.routines,
-      assignment: ICONS.assignments,
-    };
+    const map: Record<string, string> = { session: ICONS.sessions, user: ICONS.users, exercise: ICONS.exercises, routine: ICONS.routines, assignment: ICONS.assignments };
     return map[type] ?? ICONS.dashboard;
   }
 
@@ -196,12 +164,11 @@ export class AdminDashboardPage implements OnInit {
     }).subscribe({
       next: (result) => {
         this.stats.set([
-          { label: 'Exercises', count: result.exercises?.meta?.totalCount ?? 0, icon: ICONS.exercises, link: '/exercises', accent: '#1CC8FF' },
+          { label: 'Exercises', count: result.exercises?.meta?.totalCount ?? 0, icon: ICONS.exercises, link: '/exercises', accent: '#3DB8FF' },
           { label: 'Routines',  count: result.routines?.meta?.totalCount ?? 0,  icon: ICONS.routines,  link: '/routines',  accent: '#B794F4' },
           { label: 'Users',     count: result.users?.meta?.totalCount ?? 0,     icon: ICONS.users,     link: '/users',     accent: '#2DA44E' },
           { label: 'Sessions',  count: result.sessions?.meta?.totalCount ?? 0,  icon: ICONS.sessions,  link: '/sessions',  accent: '#F6C90E' },
         ]);
-
         const sessions: WorkoutSession[] = result.sessions?.data ?? [];
         this.activityFeed.set(sessions.map(s => ({
           type: 'session' as const,
@@ -210,7 +177,6 @@ export class AdminDashboardPage implements OnInit {
           time:  s.startTime ? new Date(s.startTime).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '',
           accent: '#F6C90E',
         })));
-
         this.loading.set(false);
       },
     });

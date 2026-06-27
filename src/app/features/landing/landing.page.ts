@@ -1,25 +1,18 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-
-const MASCOT_MAIN        = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gopher-Gains-Logo-v1-Photoroom-WfSlqGUxq90Xa0oAPjDPNoaGcCYtXQ.png';
-const MASCOT_CLIPBOARD   = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/gopher-clipboard-Photoroom-IsR5uV4PXCOFc4rG4gWb2fp9Og5EGF.png';
-const MASCOT_CELEBRATING = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gopher-celebrating-BZF4N0dTYgz8RsFhJeLbyonFVV35Lx.png';
-const MASCOT_THINKING    = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gopher-thinking-Photoroom-0gguwoJ79ANQ0MBK9mrnlwsQY4QLkK.png';
+import { MascotComponent } from '../../shared/components/mascot.component';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, MascotComponent],
   template: `
     <div class="min-h-dvh flex flex-col" style="background-color: var(--color-base); color: var(--color-text);">
 
       <!-- Nav -->
-      <header
-        class="flex items-center justify-between px-6 md:px-12 h-16 flex-shrink-0 sticky top-0 z-10"
-        style="background-color: rgba(16,20,24,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--color-border);"
-      >
+      <header class="flex items-center justify-between px-6 md:px-12 h-16 flex-shrink-0 sticky top-0 z-10" style="background-color: rgba(16,20,24,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--color-border);">
         <div class="flex items-center gap-3">
-          <img [src]="mascotMain" alt="Gopher Gains" class="w-8 h-8 object-contain" width="32" height="32" />
+          <app-mascot variant="main" size="sm" alt="Gopher Gains" />
           <div class="flex flex-col leading-none">
             <span class="text-[14px] font-bold font-display tracking-tight">
               Gopher<span style="color: var(--color-accent);">Gains</span>
@@ -27,29 +20,18 @@ const MASCOT_THINKING    = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.
             <span class="text-[10px] font-mono tracking-wide uppercase" style="color: var(--color-muted);">Fitness Platform</span>
           </div>
         </div>
-        <a
-          routerLink="/login"
-          class="btn-primary text-[13px] px-5 py-2"
-        >Sign in</a>
+        <a routerLink="/login" class="btn-primary text-[13px] px-5 py-2">Sign in</a>
       </header>
 
       <!-- Hero -->
       <section class="flex flex-col items-center justify-center px-6 py-28 md:py-36 text-center">
         <div class="max-w-2xl mx-auto">
-
           <p class="text-[11px] font-mono font-semibold uppercase tracking-[0.18em] mb-6" style="color: var(--color-accent);">
             Personal Fitness Platform
           </p>
 
-          <!-- Hero mascot — primary brand moment -->
           <div class="flex justify-center mb-10">
-            <img
-              [src]="mascotMain"
-              alt="Gopher Gains mascot lifting dumbbells"
-              class="w-44 h-44 md:w-56 md:h-56 object-contain"
-              width="224"
-              height="224"
-            />
+            <app-mascot variant="main" size="3xl" alt="Gopher Gains mascot lifting" />
           </div>
 
           <h1 class="text-4xl md:text-6xl font-bold font-display tracking-tight leading-[1.08] mb-6" style="color: var(--color-text);">
@@ -62,23 +44,13 @@ const MASCOT_THINKING    = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.
           </p>
 
           <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              routerLink="/login"
-              class="btn-primary w-full sm:w-auto px-8 py-3.5 text-[15px] rounded-xl"
-            >
-              Get started
-            </a>
-            <a
-              routerLink="/login"
-              class="btn-secondary w-full sm:w-auto px-8 py-3.5 text-[15px] rounded-xl"
-            >
-              View demo
-            </a>
+            <a routerLink="/login" class="btn-primary w-full sm:w-auto px-8 py-3.5 text-[15px] rounded-xl">Get started</a>
+            <a routerLink="/login" class="btn-secondary w-full sm:w-auto px-8 py-3.5 text-[15px] rounded-xl">View demo</a>
           </div>
         </div>
       </section>
 
-      <!-- Features -->
+      <!-- Features: Built around your training -->
       <section class="px-6 md:px-12 py-24 md:py-28" style="border-top: 1px solid var(--color-border);">
         <div class="max-w-5xl mx-auto">
           <p class="text-[11px] font-mono font-semibold uppercase tracking-[0.15em] text-center mb-4" style="color: var(--color-accent);">Why Gopher Gains</p>
@@ -87,31 +59,29 @@ const MASCOT_THINKING    = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.
           </h2>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
             <div class="flex flex-col items-start p-8 rounded-2xl" style="background-color: var(--color-surface); border: 1px solid var(--color-border);">
-              <img [src]="mascotClipboard" alt="" class="w-28 h-28 object-contain mb-6" width="112" height="112" aria-hidden="true" />
-              <h3 class="text-[17px] font-bold font-display mb-3" style="color: var(--color-text);">Build your routines</h3>
+              <app-mascot variant="clipboard" size="lg" alt="" />
+              <h3 class="text-[17px] font-bold font-display mb-3 mt-6" style="color: var(--color-text);">Build your routines</h3>
               <p class="text-[14px] leading-relaxed" style="color: var(--color-muted);">
                 Create routines from your exercise library. Organize sets, reps, and rest times exactly how you want.
               </p>
             </div>
 
             <div class="flex flex-col items-start p-8 rounded-2xl" style="background-color: var(--color-surface); border: 1px solid var(--color-border);">
-              <img [src]="mascotMain" alt="" class="w-28 h-28 object-contain mb-6" width="112" height="112" aria-hidden="true" />
-              <h3 class="text-[17px] font-bold font-display mb-3" style="color: var(--color-text);">Log every session</h3>
+              <app-mascot variant="main" size="lg" alt="" />
+              <h3 class="text-[17px] font-bold font-display mb-3 mt-6" style="color: var(--color-text);">Log every session</h3>
               <p class="text-[14px] leading-relaxed" style="color: var(--color-muted);">
                 Track every workout with precision. Your session history becomes your most valuable training asset.
               </p>
             </div>
 
             <div class="flex flex-col items-start p-8 rounded-2xl" style="background-color: var(--color-surface); border: 1px solid var(--color-border);">
-              <img [src]="mascotCelebrating" alt="" class="w-28 h-28 object-contain mb-6" width="112" height="112" aria-hidden="true" />
-              <h3 class="text-[17px] font-bold font-display mb-3" style="color: var(--color-text);">See your progress</h3>
+              <app-mascot variant="celebrating" size="lg" alt="" />
+              <h3 class="text-[17px] font-bold font-display mb-3 mt-6" style="color: var(--color-text);">See your progress</h3>
               <p class="text-[14px] leading-relaxed" style="color: var(--color-muted);">
                 Personal records, weekly streaks, and consistency metrics. Proof that your hard work is paying off.
               </p>
             </div>
-
           </div>
         </div>
       </section>
@@ -128,7 +98,7 @@ const MASCOT_THINKING    = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.
             <p class="text-[14px] font-medium" style="color: var(--color-muted);">No subscriptions required</p>
           </div>
           <div>
-            <p class="text-4xl font-bold font-mono tracking-tight mb-2" style="color: var(--color-accent);">&#x221E;</p>
+            <p class="text-4xl font-bold font-mono tracking-tight mb-2" style="color: var(--color-accent);">&infin;</p>
             <p class="text-[14px] font-medium" style="color: var(--color-muted);">Exercises in your library</p>
           </div>
         </div>
@@ -171,23 +141,14 @@ const MASCOT_THINKING    = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.
       <!-- CTA -->
       <section class="px-6 md:px-12 py-28 text-center">
         <div class="max-w-lg mx-auto">
-          <img
-            [src]="mascotCelebrating"
-            alt="Gopher celebrating"
-            class="w-32 h-32 object-contain mx-auto mb-8"
-            width="128"
-            height="128"
-          />
-          <h2 class="text-3xl md:text-4xl font-bold font-display tracking-tight mb-4" style="color: var(--color-text);">
+          <app-mascot variant="celebrating" size="2xl" alt="Gopher celebrating" />
+          <h2 class="text-3xl md:text-4xl font-bold font-display tracking-tight mb-4 mt-8" style="color: var(--color-text);">
             Ready to start gaining?
           </h2>
           <p class="text-[15px] mb-10 leading-relaxed" style="color: var(--color-muted);">
             Sign in and start logging your first session today. No coach needed.
           </p>
-          <a
-            routerLink="/login"
-            class="btn-primary inline-flex items-center justify-center px-10 py-4 text-[16px] rounded-xl"
-          >
+          <a routerLink="/login" class="btn-primary inline-flex items-center justify-center px-10 py-4 text-[16px] rounded-xl">
             Sign in to Gopher Gains
           </a>
         </div>
@@ -196,20 +157,14 @@ const MASCOT_THINKING    = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.
       <!-- Footer -->
       <footer class="px-6 md:px-12 py-8 text-center" style="border-top: 1px solid var(--color-border);">
         <div class="flex items-center justify-center gap-2.5 mb-2">
-          <img [src]="mascotMain" alt="" class="w-6 h-6 object-contain" width="24" height="24" aria-hidden="true" />
+          <app-mascot variant="main" size="xs" alt="" />
           <span class="text-[14px] font-bold font-display tracking-tight">
             Gopher<span style="color: var(--color-accent);">Gains</span>
           </span>
         </div>
         <p class="text-[12px]" style="color: var(--color-muted);">Your training. Your progress. Your gains.</p>
       </footer>
-
     </div>
   `,
 })
-export class LandingPage {
-  protected readonly mascotMain        = MASCOT_MAIN;
-  protected readonly mascotClipboard   = MASCOT_CLIPBOARD;
-  protected readonly mascotCelebrating = MASCOT_CELEBRATING;
-  protected readonly mascotThinking    = MASCOT_THINKING;
-}
+export class LandingPage {}

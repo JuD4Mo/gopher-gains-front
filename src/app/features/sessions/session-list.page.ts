@@ -21,17 +21,10 @@ import { ICONS } from '../../shared/icons';
   imports: [RouterLink, FormsModule, DatePipe, LoadingSpinnerComponent, EmptyStateComponent, PaginationComponent, ErrorMessageComponent, StatusBadgeComponent, SafeHtmlPipe],
   template: `
     <div class="p-5 lg:p-8 space-y-6 max-w-[1400px] mx-auto">
-
-      <!-- Page header -->
       <div class="flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background-color: rgba(246,201,14,0.12); color: #F6C90E;">
-            <div class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.sessions | safeHtml"></div>
-          </div>
-          <div>
-            <h2 class="text-lg font-bold font-display leading-none" style="color: var(--color-text);">Sessions</h2>
-            <p class="text-xs font-mono mt-0.5" style="color: var(--color-muted);">Workout history</p>
-          </div>
+        <div>
+          <h2 class="text-xl font-bold font-display" style="color: var(--color-text);">Sessions</h2>
+          <p class="text-sm font-mono mt-1" style="color: var(--color-muted);">Workout history</p>
         </div>
         <a routerLink="/sessions/new" class="btn-primary">
           <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.plus | safeHtml"></span>
@@ -39,9 +32,7 @@ import { ICONS } from '../../shared/icons';
         </a>
       </div>
 
-      <!-- Table card -->
       <div class="card">
-        <!-- Filter -->
         <div class="p-5" style="border-bottom: 1px solid var(--color-border);">
           <select [(ngModel)]="statusFilter" (change)="onFilterChange()" class="input max-w-[180px]">
             <option value="">All statuses</option>
@@ -69,20 +60,12 @@ import { ICONS } from '../../shared/icons';
               <tbody>
                 @for (s of sessions(); track s.id) {
                   <tr class="table-row">
-                    <td class="table-cell">
-                      <span class="font-mono font-medium" style="color: var(--color-muted);">#{{ s.id }}</span>
-                    </td>
+                    <td class="table-cell"><span class="font-mono font-medium" style="color: var(--color-muted);">#{{ s.id }}</span></td>
                     <td class="table-cell hidden sm:table-cell" style="color: var(--color-muted);">{{ userNames()[s.userId] ?? 'User #' + s.userId }}</td>
-                    <td class="table-cell">
-                      <app-status-badge [status]="s.status" />
-                    </td>
+                    <td class="table-cell"><app-status-badge [status]="s.status" /></td>
                     <td class="table-cell hidden md:table-cell font-mono" style="color: var(--color-muted);">{{ s.startTime | date:'MMM d, HH:mm' }}</td>
                     <td class="table-cell text-right">
-                      <a
-                        [routerLink]="['/sessions', s.id]"
-                        class="btn-ghost text-xs px-2.5 py-1.5"
-                        [attr.aria-label]="'View session #' + s.id"
-                      >
+                      <a [routerLink]="['/sessions', s.id]" class="btn-ghost text-xs px-2.5 py-1.5" [attr.aria-label]="'View session #' + s.id">
                         <span class="w-3.5 h-3.5 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.chevronRight | safeHtml"></span>
                         View
                       </a>
@@ -114,17 +97,10 @@ export class SessionListPage implements OnInit {
 
   ngOnInit() {
     this.userService.getAll({ limit: 100 }).pipe(catchError(() => of(null))).subscribe({
-      next: (res) => {
-        if (res) {
-          const names: Record<number, string> = {};
-          for (const u of res.data) names[u.id] = `${u.name} ${u.lastName}`;
-          this.userNames.set(names);
-        }
-      },
+      next: (res) => { if (res) { const n: Record<number, string> = {}; for (const u of res.data) n[u.id] = `${u.name} ${u.lastName}`; this.userNames.set(n); } },
     });
     this.load();
   }
-
   private load() {
     this.loading.set(true); this.error.set(null);
     this.sessionService.getAll({ status: this.statusFilter || undefined, page: this.currentPage }).subscribe({

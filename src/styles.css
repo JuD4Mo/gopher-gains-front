@@ -2,9 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── CSS design tokens ───────────────────────────────── */
 :root {
-  /* dark theme is the default */
   --color-base:         #101418;
   --color-surface:      #1A1F29;
   --color-card:         #242B36;
@@ -36,123 +34,59 @@
   --color-accent-dim:   rgba(0,172,215,0.10);
 }
 
-/* ─── Base layer ──────────────────────────────────────── */
 @layer base {
-  html {
-    background-color: var(--color-base);
-    color: var(--color-text);
-  }
-
-  body {
-    @apply antialiased font-sans;
-    background-color: var(--color-base);
-    color: var(--color-text);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  ::selection {
-    background-color: rgba(61, 184, 255, 0.2);
-    color: var(--color-text);
-  }
-
-  :focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 2px var(--color-accent), 0 0 0 4px rgba(0,172,215,0.15);
-  }
-
-  /* Scrollbar styling */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: var(--color-surface);
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--color-border);
-    border-radius: 3px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-muted);
-  }
+  html { background-color: var(--color-base); color: var(--color-text); }
+  body { @apply antialiased font-sans; background-color: var(--color-base); color: var(--color-text); }
+  ::selection { background-color: rgba(61,184,255,0.2); color: var(--color-text); }
+  :focus-visible { outline: none; box-shadow: 0 0 0 2px var(--color-accent), 0 0 0 4px var(--color-accent-dim); }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--color-surface); }
+  ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-muted); }
 }
 
-/* ─── Component layer ─────────────────────────────────── */
 @layer components {
-  /* Buttons */
   .btn {
     @apply inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-150 focus-visible:outline-none disabled:opacity-50 disabled:cursor-not-allowed select-none;
   }
-
   .btn-primary {
     @apply btn text-white font-semibold;
     background-color: var(--color-accent);
   }
-  .btn-primary:hover:not(:disabled) {
-    background-color: var(--color-accent-dark);
-  }
-  .btn-primary:active:not(:disabled) {
-    background-color: var(--color-accent-dark);
-    transform: translateY(1px);
-  }
-
+  .btn-primary:hover:not(:disabled) { background-color: var(--color-accent-dark); }
+  .btn-primary:active:not(:disabled) { background-color: var(--color-accent-dark); transform: translateY(1px); }
   .btn-secondary {
     @apply btn font-medium;
     border: 1px solid var(--color-border);
     color: var(--color-text);
     background-color: transparent;
   }
-  .btn-secondary:hover:not(:disabled) {
-    background-color: var(--color-card-hover);
-    border-color: var(--color-muted);
-  }
-
+  .btn-secondary:hover:not(:disabled) { background-color: var(--color-card-hover); border-color: var(--color-muted); }
   .btn-danger {
     @apply btn text-white font-semibold;
     background-color: #CF222E;
   }
-  .btn-danger:hover:not(:disabled) {
-    background-color: #b91c1c;
-  }
-
+  .btn-danger:hover:not(:disabled) { background-color: #b91c1c; }
   .btn-ghost {
     @apply btn;
     color: var(--color-muted);
     background-color: transparent;
   }
-  .btn-ghost:hover:not(:disabled) {
-    color: var(--color-text);
-    background-color: var(--color-card-hover);
-  }
-
-  /* Form inputs */
+  .btn-ghost:hover:not(:disabled) { color: var(--color-text); background-color: var(--color-card-hover); }
   .input {
     @apply w-full px-3.5 py-2.5 text-sm rounded-lg transition-all outline-none font-sans;
     border: 1px solid var(--color-border);
     background-color: var(--color-surface);
     color: var(--color-text);
   }
-  .input::placeholder {
-    color: var(--color-muted);
-    opacity: 0.7;
-  }
-  .input:focus {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px var(--color-accent-dim);
-  }
-  .input:hover:not(:focus) {
-    border-color: var(--color-muted);
-  }
-
-  /* Card */
+  .input::placeholder { color: var(--color-muted); opacity: 0.7; }
+  .input:focus { border-color: var(--color-accent); box-shadow: 0 0 0 3px var(--color-accent-dim); }
+  .input:hover:not(:focus) { border-color: var(--color-muted); }
   .card {
     @apply rounded-xl transition-all duration-150;
     background-color: var(--color-card);
     border: 1px solid var(--color-border);
   }
-
-  /* Table */
   .table-header-cell {
     @apply py-3 px-5 text-left text-xs font-semibold uppercase tracking-wider;
     color: var(--color-muted);
@@ -162,34 +96,10 @@
     @apply transition-colors duration-100;
     border-bottom: 1px solid rgba(42,51,71,0.5);
   }
-  .table-row:hover {
-    background-color: var(--color-card-hover);
-  }
-  .table-cell {
-    @apply py-3 px-5 text-sm;
-    color: var(--color-text);
-  }
-
-  /* Section label */
-  .section-label {
-    @apply text-xs font-semibold uppercase tracking-widest;
-    color: var(--color-muted);
-  }
-
-  /* Stat number */
-  .stat-number {
-    @apply text-3xl font-bold font-display tracking-tight;
-    color: var(--color-text);
-  }
-
-  /* Divider */
-  .divider {
-    height: 1px;
-    background-color: var(--color-border);
-  }
-
-  /* Pill badge */
-  .pill {
-    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold font-mono;
-  }
+  .table-row:hover { background-color: var(--color-card-hover); }
+  .table-cell { @apply py-3 px-5 text-sm; color: var(--color-text); }
+  .section-label { @apply text-xs font-semibold uppercase tracking-widest; color: var(--color-muted); }
+  .stat-number { @apply text-3xl font-bold font-display tracking-tight; color: var(--color-text); }
+  .divider { height: 1px; background-color: var(--color-border); }
+  .pill { @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold font-mono; }
 }

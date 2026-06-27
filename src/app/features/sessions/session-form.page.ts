@@ -33,25 +33,15 @@ import { ICONS } from '../../shared/icons';
 
       <div class="card">
         <div class="px-6 pt-5 pb-4" style="border-bottom: 1px solid var(--color-border);">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color: rgba(246,201,14,0.12); color: #F6C90E;">
-              <div class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.sessions | safeHtml"></div>
-            </div>
-            <div>
-              <p class="text-sm font-semibold font-display" style="color: var(--color-text);">Start Workout Session</p>
-              <p class="text-xs font-mono" style="color: var(--color-muted);">Configure and begin your training</p>
-            </div>
-          </div>
+          <p class="text-sm font-semibold font-display" style="color: var(--color-text);">Start Workout Session</p>
+          <p class="text-xs font-mono" style="color: var(--color-muted);">Configure and begin your training</p>
         </div>
 
         <form (ngSubmit)="onSubmit()" class="p-6 space-y-5">
           <app-error-message [message]="error()" />
 
           @if (selectedRoutine()) {
-            <div
-              class="flex items-center gap-3 p-4 rounded-lg"
-              style="background-color: var(--color-accent-dim); border: 1px solid rgba(0,172,215,0.2);"
-            >
+            <div class="flex items-center gap-3 p-4 rounded-lg" style="background-color: var(--color-accent-dim); border: 1px solid rgba(61,184,255,0.2);">
               <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background-color: var(--color-accent); color: white;">
                 <div class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.routines | safeHtml"></div>
               </div>
@@ -59,18 +49,10 @@ import { ICONS } from '../../shared/icons';
                 <p class="text-xs font-mono" style="color: var(--color-muted);">Selected Routine</p>
                 <p class="text-sm font-semibold font-display truncate" style="color: var(--color-accent);">{{ selectedRoutine()!.name }}</p>
               </div>
-              <button
-                type="button"
-                (click)="showRoutineModal.set(true)"
-                class="btn-ghost text-xs px-2.5 py-1.5"
-              >Change</button>
+              <button type="button" (click)="showRoutineModal.set(true)" class="btn-ghost text-xs px-2.5 py-1.5">Change</button>
             </div>
           } @else {
-            <div
-              class="flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-all"
-              style="border: 1px dashed var(--color-border);"
-              (click)="showRoutineModal.set(true)"
-            >
+            <div class="flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-all" style="border: 1px dashed var(--color-border);" (click)="showRoutineModal.set(true)">
               <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background-color: var(--color-card-hover); color: var(--color-muted);">
                 <div class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.routines | safeHtml"></div>
               </div>
@@ -85,9 +67,7 @@ import { ICONS } from '../../shared/icons';
             <label class="block text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--color-muted);">User</label>
             <select [(ngModel)]="userId" name="userId" required class="input">
               <option value="0" disabled>Select a user</option>
-              @for (u of users(); track u.id) {
-                <option [ngValue]="u.id">{{ u.name }} {{ u.lastName }} ({{ u.email }})</option>
-              }
+              @for (u of users(); track u.id) { <option [ngValue]="u.id">{{ u.name }} {{ u.lastName }} ({{ u.email }})</option> }
             </select>
           </div>
 
@@ -98,9 +78,7 @@ import { ICONS } from '../../shared/icons';
 
           <div class="flex items-center gap-3 pt-2" style="border-top: 1px solid var(--color-border);">
             <button type="submit" [disabled]="submitting()" class="btn-primary">
-              @if (submitting()) {
-                <span class="w-4 h-4 rounded-full animate-spin border-2 border-white/30 border-t-white"></span>
-              }
+              @if (submitting()) { <span class="w-4 h-4 rounded-full animate-spin border-2 border-white/30 border-t-white"></span> }
               {{ submitting() ? 'Starting...' : 'Start Session' }}
             </button>
             <a routerLink="/sessions" class="btn-secondary">Cancel</a>
@@ -131,10 +109,7 @@ export class SessionFormPage implements OnInit {
   }
 
   protected onRoutineSelected(routine: Routine | null) {
-    if (!routine) {
-      this.showRoutineModal.set(false);
-      return;
-    }
+    if (!routine) { this.showRoutineModal.set(false); return; }
     this.selectedRoutine.set(routine);
     this.showRoutineModal.set(false);
   }
