@@ -1,7 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CardComponent } from '../../shared/components/card.component';
 import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner.component';
 import { EmptyStateComponent } from '../../shared/components/empty-state.component';
 import { PaginationComponent } from '../../shared/components/pagination.component';
@@ -15,23 +14,13 @@ import { ICONS } from '../../shared/icons';
 @Component({
   selector: 'app-routine-list',
   standalone: true,
-  imports: [
-    RouterLink, FormsModule, CardComponent, LoadingSpinnerComponent,
-    EmptyStateComponent, PaginationComponent, ErrorMessageComponent, SafeHtmlPipe,
-  ],
+  imports: [RouterLink, FormsModule, LoadingSpinnerComponent, EmptyStateComponent, PaginationComponent, ErrorMessageComponent, SafeHtmlPipe],
   template: `
-    <div class="space-y-6">
-
-      <!-- Page header -->
+    <div class="p-5 lg:p-8 space-y-6 max-w-[1400px] mx-auto">
       <div class="flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background-color: rgba(183,148,244,0.12); color: #B794F4;">
-            <div class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.routines | safeHtml"></div>
-          </div>
-          <div>
-            <h2 class="text-lg font-bold font-display leading-none" style="color: var(--color-text);">Routines</h2>
-            <p class="text-xs font-mono mt-0.5" style="color: var(--color-muted);">Workout plans</p>
-          </div>
+        <div>
+          <h2 class="text-xl font-bold font-display" style="color: var(--color-text);">Routines</h2>
+          <p class="text-sm font-mono mt-1" style="color: var(--color-muted);">Workout plans</p>
         </div>
         <a routerLink="/routines/new" class="btn-primary">
           <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.plus | safeHtml"></span>
@@ -39,16 +28,10 @@ import { ICONS } from '../../shared/icons';
         </a>
       </div>
 
-      <!-- Table card -->
       <div class="card">
-        <!-- Filters -->
         <div class="flex items-center gap-3 p-5" style="border-bottom: 1px solid var(--color-border);">
           <div class="relative flex-1 max-w-xs">
-            <div
-              class="absolute inset-y-0 left-3 flex items-center pointer-events-none [&>svg]:w-4 [&>svg]:h-4"
-              style="color: var(--color-muted);"
-              [innerHTML]="icons.search | safeHtml"
-            ></div>
+            <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none [&>svg]:w-4 [&>svg]:h-4" style="color: var(--color-muted);" [innerHTML]="icons.search | safeHtml"></div>
             <input [(ngModel)]="nameFilter" (input)="onFilterChange()" placeholder="Search routines..." class="input pl-9" />
           </div>
           <select [(ngModel)]="typeFilter" (change)="onFilterChange()" class="input max-w-[160px]">
@@ -78,19 +61,13 @@ import { ICONS } from '../../shared/icons';
                   <tr class="table-row">
                     <td class="table-cell font-medium">{{ r.name }}</td>
                     <td class="table-cell">
-                      <span
-                        class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold font-mono capitalize"
-                        [style.background-color]="r.type === 'default' ? 'rgba(0,172,215,0.12)' : 'rgba(183,148,244,0.12)'"
-                        [style.color]="r.type === 'default' ? 'var(--color-accent)' : '#B794F4'"
-                      >{{ r.type }}</span>
+                      <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold font-mono capitalize"
+                        [style.background-color]="r.type === 'default' ? 'rgba(61,184,255,0.12)' : 'rgba(183,148,244,0.12)'"
+                        [style.color]="r.type === 'default' ? 'var(--color-accent)' : '#B794F4'">{{ r.type }}</span>
                     </td>
                     <td class="table-cell hidden sm:table-cell font-mono" style="color: var(--color-muted);">{{ r.frequency }}x / week</td>
                     <td class="table-cell text-right">
-                      <a
-                        [routerLink]="['/routines', r.id]"
-                        class="btn-ghost text-xs px-2.5 py-1.5"
-                        [attr.aria-label]="'View ' + r.name"
-                      >
+                      <a [routerLink]="['/routines', r.id]" class="btn-ghost text-xs px-2.5 py-1.5" [attr.aria-label]="'View ' + r.name">
                         <span class="w-3.5 h-3.5 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.chevronRight | safeHtml"></span>
                         View
                       </a>

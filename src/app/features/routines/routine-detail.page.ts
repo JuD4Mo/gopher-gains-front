@@ -1,12 +1,11 @@
 import { Component, inject, signal, viewChild, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
 import { CardComponent } from '../../shared/components/card.component';
 import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner.component';
 import { ErrorMessageComponent } from '../../shared/components/error-message.component';
-import { EmptyStateComponent } from '../../shared/components/empty-state.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog.component';
+import { MascotComponent } from '../../shared/components/mascot.component';
 import { RoutineService } from '../../services/routine.service';
 import { RoutineExerciseService } from '../../services/routine-exercise.service';
 import { ExerciseService } from '../../services/exercise.service';
@@ -21,15 +20,15 @@ import { ICONS } from '../../shared/icons';
 @Component({
   selector: 'app-routine-detail',
   standalone: true,
-  imports: [RouterLink, FormsModule, CardComponent, LoadingSpinnerComponent, ErrorMessageComponent, EmptyStateComponent, ConfirmDialogComponent, SafeHtmlPipe],
+  imports: [RouterLink, FormsModule, CardComponent, LoadingSpinnerComponent, ErrorMessageComponent, ConfirmDialogComponent, MascotComponent, SafeHtmlPipe],
   template: `
-    <div class="space-y-6">
+    <div class="p-5 lg:p-8 space-y-6 max-w-[1400px] mx-auto">
       <div class="flex items-center gap-3">
         <a routerLink="/routines" class="btn-ghost px-0 text-sm gap-1.5">
           <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.arrowLeft | safeHtml"></span>
           Back
         </a>
-        <h2 class="text-xl font-bold font-display text-text">{{ routine()?.name ?? 'Routine' }}</h2>
+        <h2 class="text-xl font-bold font-display" style="color: var(--color-text);">{{ routine()?.name ?? 'Routine' }}</h2>
       </div>
 
       @if (loading()) { <app-loading-spinner size="lg" /> }
@@ -38,24 +37,22 @@ import { ICONS } from '../../shared/icons';
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <app-card>
             <div class="p-5 space-y-4">
-              <h3 class="text-base font-semibold text-text font-display">Details</h3>
+              <h3 class="text-base font-semibold font-display" style="color: var(--color-text);">Details</h3>
               <div>
-                <span class="text-xs font-semibold uppercase tracking-wider text-text-muted">Description</span>
-                <p class="text-sm text-text mt-1">{{ routine()?.description }}</p>
+                <span class="text-xs font-semibold uppercase tracking-wider" style="color: var(--color-muted);">Description</span>
+                <p class="text-sm mt-1" style="color: var(--color-text);">{{ routine()?.description }}</p>
               </div>
               <div class="flex gap-4">
                 <div>
-                  <span class="text-xs font-semibold uppercase tracking-wider text-text-muted">Frequency</span>
-                  <p class="text-sm text-text mt-1 font-medium">{{ routine()?.frequency }}x / week</p>
+                  <span class="text-xs font-semibold uppercase tracking-wider" style="color: var(--color-muted);">Frequency</span>
+                  <p class="text-sm mt-1 font-medium" style="color: var(--color-text);">{{ routine()?.frequency }}x / week</p>
                 </div>
                 <div>
-                  <span class="text-xs font-semibold uppercase tracking-wider text-text-muted">Type</span>
-                  <p class="text-sm text-text mt-1 capitalize font-medium">{{ routine()?.type }}</p>
+                  <span class="text-xs font-semibold uppercase tracking-wider" style="color: var(--color-muted);">Type</span>
+                  <p class="text-sm mt-1 capitalize font-medium" style="color: var(--color-text);">{{ routine()?.type }}</p>
                 </div>
               </div>
-              <a [routerLink]="['/routines', routine()?.id, 'edit']" class="btn-secondary w-full text-center">
-                Edit Routine
-              </a>
+              <a [routerLink]="['/routines', routine()?.id, 'edit']" class="btn-secondary w-full text-center">Edit Routine</a>
             </div>
           </app-card>
 
@@ -63,7 +60,7 @@ import { ICONS } from '../../shared/icons';
             <app-card>
               <div class="p-5">
                 <div class="flex items-center justify-between mb-4">
-                  <h3 class="text-base font-semibold text-text font-display">Exercises ({{ exercises().length }})</h3>
+                  <h3 class="text-base font-semibold font-display" style="color: var(--color-text);">Exercises ({{ exercises().length }})</h3>
                   @if (!showAddForm()) {
                     <button (click)="showAddForm.set(true)" class="btn-primary text-xs px-3 py-1.5">
                       <span class="w-3.5 h-3.5 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.plus | safeHtml"></span>
@@ -75,19 +72,17 @@ import { ICONS } from '../../shared/icons';
                 @if (exercisesError()) { <app-error-message [message]="exercisesError()" /> }
 
                 @if (showAddForm()) {
-                  <div class="flex flex-wrap items-end gap-2 mb-4 p-4 bg-surface-light rounded-lg border border-border">
+                  <div class="flex flex-wrap items-end gap-2 mb-4 p-4 rounded-lg border border-border" style="background-color: var(--color-surface);">
                     <div class="flex-1 min-w-40">
-                      <label class="block text-xs font-medium text-text-muted mb-1">Exercise</label>
-                      <select [(ngModel)]="newExerciseId" class="w-full px-3 py-2 text-sm border border-border rounded-lg bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none">
+                      <label class="block text-xs font-medium mb-1" style="color: var(--color-muted);">Exercise</label>
+                      <select [(ngModel)]="newExerciseId" class="w-full px-3 py-2 text-sm border border-border rounded-lg transition-all outline-none" style="background-color: var(--color-card); color: var(--color-text);">
                         <option value="0" disabled>Select exercise</option>
-                        @for (ex of availableExercises(); track ex.id) {
-                          <option [ngValue]="ex.id">{{ ex.name }} ({{ ex.muscleGroup }})</option>
-                        }
+                        @for (ex of availableExercises(); track ex.id) { <option [ngValue]="ex.id">{{ ex.name }} ({{ ex.muscleGroup }})</option> }
                       </select>
                     </div>
                     <div class="w-24">
-                      <label class="block text-xs font-medium text-text-muted mb-1">Step</label>
-                      <input type="number" [(ngModel)]="newStepNumber" min="1" class="w-full px-3 py-2 text-sm border border-border rounded-lg bg-card focus:border-accent/30 focus:ring-2 focus:ring-accent/10 transition-all outline-none" />
+                      <label class="block text-xs font-medium mb-1" style="color: var(--color-muted);">Step</label>
+                      <input type="number" [(ngModel)]="newStepNumber" min="1" class="w-full px-3 py-2 text-sm border border-border rounded-lg transition-all outline-none" style="background-color: var(--color-card); color: var(--color-text);" />
                     </div>
                     <button (click)="addExercise()" class="btn-primary text-xs px-3 py-2">Add</button>
                     <button (click)="showAddForm.set(false)" class="btn-ghost text-xs px-3 py-2">Cancel</button>
@@ -95,14 +90,18 @@ import { ICONS } from '../../shared/icons';
                 }
 
                 @if (exercises().length === 0) {
-                  <app-empty-state [icon]="icons.emptyBox" title="No exercises in this routine" message="Add exercises to build your routine." />
+                  <div class="flex flex-col items-center py-12 gap-3">
+                    <app-mascot variant="clipboard" size="lg" alt="No exercises" />
+                    <p class="text-sm font-semibold font-display" style="color: var(--color-text);">No exercises in this routine</p>
+                    <p class="text-xs" style="color: var(--color-muted);">Add exercises to build your routine.</p>
+                  </div>
                 } @else {
                   <div class="space-y-2">
                     @for (re of exercises(); track re.exerciseId) {
-                      <div class="flex items-center gap-3 px-4 py-3 bg-surface-light rounded-lg border border-border/50">
-                        <span class="w-8 h-8 rounded-lg bg-accent/10 text-accent flex items-center justify-center text-sm font-bold font-display">{{ re.stepNumber }}</span>
+                      <div class="flex items-center gap-3 px-4 py-3 rounded-lg border border-border/50" style="background-color: var(--color-surface);">
+                        <span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold font-display" style="background-color: var(--color-accent-dim); color: var(--color-accent);">{{ re.stepNumber }}</span>
                         <div class="flex-1">
-                          <p class="text-sm font-medium text-text">{{ exerciseNames()[re.exerciseId] ?? 'Exercise #' + re.exerciseId }}</p>
+                          <p class="text-sm font-medium" style="color: var(--color-text);">{{ exerciseNames()[re.exerciseId] ?? 'Exercise #' + re.exerciseId }}</p>
                         </div>
                         <button (click)="confirmRemoveExercise(re.exerciseId)" class="btn-ghost text-xs text-danger hover:text-danger px-2 py-1" aria-label="Remove exercise">
                           <span class="w-4 h-4 [&>svg]:w-full [&>svg]:h-full" [innerHTML]="icons.trash | safeHtml"></span>
@@ -153,9 +152,9 @@ export class RoutineDetailPage implements OnInit {
         if (result.routineExercises) this.exercises.set(result.routineExercises.data);
         if (result.allExercises) {
           this.availableExercises.set(result.allExercises.data);
-          const names: Record<number, string> = {};
-          for (const ex of result.allExercises.data) names[ex.id] = ex.name;
-          this.exerciseNames.set(names);
+          const n: Record<number, string> = {};
+          for (const ex of result.allExercises.data) n[ex.id] = ex.name;
+          this.exerciseNames.set(n);
         }
         this.loading.set(false);
       },
@@ -182,9 +181,7 @@ export class RoutineDetailPage implements OnInit {
       title: 'Remove exercise',
       message: 'Are you sure you want to remove this exercise from the routine?',
       confirmText: 'Remove',
-      onConfirm: () => {
-        this.routineExerciseService.remove(this.routineId, exerciseId).subscribe({ next: () => this.load(), error: (err) => this.exercisesError.set(err.error?.message ?? err.message) });
-      },
+      onConfirm: () => { this.routineExerciseService.remove(this.routineId, exerciseId).subscribe({ next: () => this.load(), error: (err) => this.exercisesError.set(err.error?.message ?? err.message) }); },
     });
   }
 }
